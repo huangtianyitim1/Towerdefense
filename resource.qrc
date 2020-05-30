@@ -1,0 +1,34 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/.DS_Store</file>
+        <file>images/74660c687cf5ff0a53a0b8c1bf2d2b71.jpg</file>
+        <file>images/apple.png</file>
+        <file>images/banjila.png</file>
+        <file>images/bullet.png</file>
+        <file>images/button.png</file>
+        <file>images/buttonCover.png</file>
+        <file>images/daiouqixisi.jpg</file>
+        <file>images/daiouqixisi.png</file>
+        <file>images/dot.png</file>
+        <file>images/head.png</file>
+        <file>images/huoqiu.png</file>
+        <file>images/jenny.png</file>
+        <file>images/jiekeluomu.png</file>
+        <file>images/kuailong.png</file>
+        <file>images/leixilamu.png</file>
+        <file>images/map.jpg</file>
+        <file>images/me.jpg</file>
+        <file>images/penhuolong.jpg</file>
+        <file>images/penhuolong.png</file>
+        <file>images/skydragon.jpg</file>
+        <file>images/tiejiayong.png</file>
+        <file>images/wujitaina.png</file>
+        <file>images/yeshudan.jpeg</file>
+        <file>images/微信图片_20200530134130.png</file>
+        <file>images/微信图片_20200530134434.png</file>
+        <file>images/微信图片_20200530134553.png</file>
+        <file>sounds/hdl.mp3</file>
+        <file>images/cangxiang.png</file>
+        <file>images/dailong.png</file>
+    </qresource>
+</RCC>
