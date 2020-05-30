@@ -29,6 +29,7 @@ public:
     void initgame();
     void draw(QPainter &p);
     Enemy* gen_enemy();    //返回一个指向某一子类敌人的基类指针
+    bool no_tower(int x, int y);   //判断这里 是否有塔
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -36,6 +37,7 @@ protected:
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
+    void mouseDoubleClickEvent(QMouseEvent *event);
 
 private:
     Ui::MainWindow *ui;

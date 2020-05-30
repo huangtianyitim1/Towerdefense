@@ -19,6 +19,8 @@ void Tower::show(QPainter &p){
     for (int i=0; i<bs.size(); i++){
         bs[i].show(p);
     }
+    QString s_level="Level:"+QString::number(level);
+    p.drawText(x+10, y-10,200,50,1, s_level);
 }
 
 void Tower::getenemy(vector<Enemy *> &es){
@@ -36,6 +38,7 @@ void Tower::getenemy(vector<Enemy *> &es){
         //cout<<ex<<"------"<<ey<<endl;
         bs.push_back(Bullet());
         bs.back().set(x+30, y+30, es[ei]);
+        bs.back().setspd(spd);     //初始化子弹的射速
             }
 }
 

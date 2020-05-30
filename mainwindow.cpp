@@ -127,18 +127,48 @@ void MainWindow::timerEvent(QTimerEvent *e){
 }
 
 
+bool MainWindow::no_tower(int x, int y){
+    int count=0;
+    for (int i=0; i<tw.size(); i++){
+        if (x==tw[i].getx() &&y==tw[i].gety()) count++;
+    }
+    if (count ==0) return true;
+    else return false;
+}
+
 void MainWindow::mousePressEvent(QMouseEvent *event){
     int mx=event->x();
     int my=event->y();
     mx=mx-mx%100;  //90边长为一个单位？？
     my=my-my%100;
+    int x=event->x();
+    int y=event->y();
     QWidget::mousePressEvent(event);
-    tw.push_back(Tower());
-    double fx=static_cast<double>(mx);
-    double fy=static_cast<double>(my);
-    tw.back().set(fx, fy);
+    if (event->button()==Qt::LeftButton){                                     //左键添加，有喷火龙则不加
+        if (no_tower(mx, my)){
+            tw.push_back(Tower());
+            double fx=static_cast<double>(mx);
+            double fy=static_cast<double>(my);
+            tw.back().set(fx, fy);}
+    }
+    if (event->button()==Qt::RightButton){    //右键落入一定范围后，删除
+        for (int i=0; i<tw.size(); i++){
+            if (tw[i].getx()+70>x && tw[i].getx()+20<x && tw[i].gety()+70>y
+                    && tw[i].gety()+20<y) tw.erase(tw.begin()+i);
+        }
+    }
 }
 
 void MainWindow::mouseReleaseEvent(QMouseEvent *event){}
 
 void MainWindow::mouseMoveEvent(QMouseEvent *event){}
+
+void MainWindow::mouseDoubleClickEvent(QMouseEvent *event){    //双击实现升级：射速变快
+    int x=event->x();
+    int y=event->y();
+    for (int i=0; i<tw.size(); i++){
+        if (tw[i].getx()+70>x && tw[i].getx()+20<x && tw[i].gety()+70>y
+                && tw[i].gety()+20<y) {tw[i].setspd(10); tw[i].levelup();
+            }
+}
+}
