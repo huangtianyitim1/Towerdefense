@@ -167,8 +167,8 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event){    //Ë«»÷ÊµÏÖÉý¼¶£ºÉ
     int x=event->x();
     int y=event->y();
     for (int i=0; i<tw.size(); i++){
-        if (tw[i].getx()+70>x && tw[i].getx()+20<x && tw[i].gety()+70>y
-                && tw[i].gety()+20<y) {tw[i].setspd(10); tw[i].levelup();
+        if (tw[i].getx()+60>x && tw[i].getx()+20<x && tw[i].gety()+70>y
+                && tw[i].gety()+20<y) {tw[i].levelup();
             }
 }
 }

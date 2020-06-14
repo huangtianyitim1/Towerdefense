@@ -39,6 +39,7 @@ void Tower::getenemy(vector<Enemy *> &es){
         bs.push_back(Bullet());
         bs.back().set(x+30, y+30, es[ei]);
         bs.back().setspd(spd);     //初始化子弹的射速
+        bs.back().setpower(power);
             }
 }
 
@@ -52,4 +53,9 @@ void Tower::attack(){
             bs.erase(bs.begin()+i);
         }
     }
+}
+
+void Tower::levelup(){
+    level++;
+    power=power+10;          //升级加威力
 }

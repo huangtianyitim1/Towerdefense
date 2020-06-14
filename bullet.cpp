@@ -40,7 +40,7 @@ void Bullet::show(QPainter &p){
     p.drawImage(target, pic_b);
 }
 
-void Bullet::setp(int p){
+void Bullet::setpower(int p){
     power=p;
 }
 
@@ -59,3 +59,4 @@ void Bullet::move(){
         //cout<<cos(dir)<<endl;
     }
 }
+
