@@ -30,7 +30,8 @@ SOURCES += \
     enemy_base.cpp \
     enemy_s.cpp \
     map1.cpp \
-    tower.cpp
+    tower.cpp \
+    start_window.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -38,10 +39,12 @@ HEADERS += \
     enemy_base.h \
     enemy_s.h \
     map1.h \
-    tower.h
+    tower.h \
+    start_window.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    start_window.ui
 
 RESOURCES += \
     resource.qrc

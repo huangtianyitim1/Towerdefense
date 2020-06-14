@@ -30,5 +30,6 @@
         <file>sounds/hdl.mp3</file>
         <file>images/cangxiang.png</file>
         <file>images/dailong.png</file>
+        <file>images/fengmian_1.jpg</file>
     </qresource>
 </RCC>
