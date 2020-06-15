@@ -16,7 +16,6 @@ protected:
     double x,y;  //位置
     double ex, ey; //瞄准的敌人位置
     vector <Bullet> bs;    //装子弹
-    const static int w,h;    //图片大小
     QImage pic_t;
     double range=200;  //范围
     int ei;  //攻击第几个敌人
@@ -26,6 +25,7 @@ protected:
 public:
     Tower(){}
     ~Tower(){}
+    const static int w,h;    //图片大小
     void set(double x, double y);   //位置和
     void setspd(int spd) {this->spd=spd;}             //设置自己的所有的子弹速度，感觉没什么用
     void show(QPainter&p);

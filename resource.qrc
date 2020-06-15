@@ -31,5 +31,8 @@
         <file>images/cangxiang.png</file>
         <file>images/dailong.png</file>
         <file>images/fengmian_1.jpg</file>
+        <file>images/chanzi.png</file>
+        <file>images/quxiao.png</file>
+        <file>images/shengji.png</file>
     </qresource>
 </RCC>

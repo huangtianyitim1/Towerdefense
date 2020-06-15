@@ -1,7 +1,7 @@
 #include"tower.h"
 
-const int Tower::w=80;
-const int Tower::h=80;
+const int Tower::w=85;
+const int Tower::h=85;
 
 void Tower::set(double x, double y){
     this->x=x;

@@ -23,7 +23,7 @@ void start_window::paintEvent(QPaintEvent * ){
 
 void start_window::on_pushButton_clicked()
 {
-    MainWindow *w=new MainWindow();
+    MainWindow *w=new MainWindow(this);          //Ìø×ªÒ³Ãæ
     w->show();
     this->hide();
 }

@@ -44,7 +44,7 @@ private:
     static const int WINDOW_W=900;  //界面宽
     const static int WINDOW_H=600;
     static const int MARGIN=0;  //游戏边界
-    QImage dot, map;
+    QImage dot, map, remove, up, cancel;
     vector <Enemy *> e1 ;  //一群敌人(不一定类型相同)的指针
     int timerid1; //敌人移动刷新的id
     static int e_spd;  //敌人移动刷新的频率
@@ -59,6 +59,8 @@ private:
     vector <Tower> tw;
     int score=0;    //分数
     QString s_score;  //分数文字
+    int m2p=0;   //鼠标和画图连接的信号
+    int tw_i;  //塔的索引记录
 };
 
 #endif // MAINWINDOW_H
