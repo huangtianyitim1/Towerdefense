@@ -28,7 +28,8 @@ protected:
 private slots:
     void on_pushButton_clicked();                         //按开始，跳转界面，同时隐藏封面
 
-
+signals:
+    void showmain1();
 
 
 private:

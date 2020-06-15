@@ -5,6 +5,8 @@
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QMediaPlayer>
+#include <iostream>
+using namespace std;
 //血的教训：不要互相引用，不好hold住，最后可能混在一起遮盖什么
 class Enemy{
 protected:

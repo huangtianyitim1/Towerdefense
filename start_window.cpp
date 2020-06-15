@@ -26,4 +26,5 @@ void start_window::on_pushButton_clicked()
     MainWindow *w=new MainWindow(this);          //Ìø×ªÒ³Ãæ
     w->show();
     this->hide();
+    //emit showmain1();
 }

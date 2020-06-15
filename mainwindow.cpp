@@ -19,6 +19,10 @@ MainWindow::MainWindow(QWidget *parent) :
     initgame();
 }
 
+void MainWindow::recieve_start(){
+    this->show();
+}
+
 Enemy* MainWindow::gen_enemy(){
     Enemy* p;
     QTime time = QTime::currentTime();     //随机数
@@ -59,7 +63,9 @@ void MainWindow::initgame(){
     remove.load(":/images/chanzi.png");
     up.load(":/images/shengji.png");
     cancel.load(":/images/quxiao.png");
-
+    type1_pic.load(":/images/xiaohuolong.png");
+    type2_pic.load(":/images/minilong.png");
+    type3_pic.load(":/images/jienigui.png");
     e1.push_back(gen_enemy());
     e1[0]->set(start_x,start_y);//初始位置
 }
@@ -81,7 +87,12 @@ void MainWindow::paintEvent(QPaintEvent *){
     //dot.load(":/images/apple.png");
     //p.drawImage(target, dot);
     p.drawImage(background, map);    //画背景
-
+    QRect type1(100,10,80,80);
+    p.drawImage(type1, type1_pic);   //画可选塔1：小火龙
+    QRect type2(200,10,80,80);
+    p.drawImage(type2, type2_pic);   //画可选塔2：迷你龙
+    QRect type3(300,10,80,80);
+    p.drawImage(type3, type3_pic);   //画可选塔2：杰尼龟
     //画对象
     draw(p);
 }
@@ -93,17 +104,23 @@ void MainWindow::draw(QPainter &p){
         e1[i]->show(p);
     }
     for (int i=0; i<tw.size(); i++){
-    tw[i].show(p);}
+    tw[i]->show(p);}
     //下面开始画每个塔的选项，升级，删除，取消
     if (m2p==1){
-        QRect op1 (tw[tw_i].getx()-60, tw[tw_i].gety()+10, 50,50);
+        QRect op1 (tw[tw_i]->getx()-60, tw[tw_i]->gety()+10, 50,50);
         p.drawImage(op1, remove);
-        QRect op2 (tw[tw_i].getx()+10, tw[tw_i].gety()-60, 50, 50);
+        QRect op2 (tw[tw_i]->getx()+10, tw[tw_i]->gety()-60, 50, 50);
         p.drawImage(op2, up);
-        QRect op3 (tw[tw_i].getx()+100, tw[tw_i].gety()+10, 50, 50);
+        QRect op3 (tw[tw_i]->getx()+100, tw[tw_i]->gety()+10, 50, 50);
         p.drawImage(op3, cancel);
     }
 
+    if(m2p==2){
+        QRect size(local_x,local_y,80,80);
+        if (type_id==1) p.drawImage(size, type1_pic);
+        if (type_id==2) p.drawImage(size, type2_pic);
+        if (type_id==3) p.drawImage(size, type3_pic);
+    }
 }
 
 void MainWindow::timerEvent(QTimerEvent *e){
@@ -115,8 +132,9 @@ void MainWindow::timerEvent(QTimerEvent *e){
             m1.collide_check(e1[i]);
             //cout<<e1[i].gethp()<<endl;
             if(m1.outbound(e1[i]) || e1[i]->die()){
-                e1.erase(e1.begin()+i);
                 score+=e1[i]->get_score();
+                delete e1[i];    //释放指向的敌人对象内存----------------
+                e1.erase(e1.begin()+i);   //删除数组的指针元素
             }
         }
     }
@@ -132,12 +150,12 @@ void MainWindow::timerEvent(QTimerEvent *e){
     }
     if(id==timerid3){
         for(int i=0; i<tw.size(); i++){
-        tw[i].getenemy(e1);
-        tw[i].attack();}
+        tw[i]->getenemy(e1);
+        tw[i]->attack();}
     }
     if(id==timerid4){
         for(int i=0; i<tw.size(); i++){
-        tw[i].attack();}
+        tw[i]->attack();}
     }
     repaint();  //和上面的结合起来看，每一定时间刷新调用一次paintevent函数
 }
@@ -146,7 +164,7 @@ void MainWindow::timerEvent(QTimerEvent *e){
 int MainWindow::no_tower(int x, int y){
     int count=0, i=0;
     for (; i<tw.size(); i++){
-        if (x==tw[i].getx() &&y==tw[i].gety()) {count++; break;}
+        if (x==tw[i]->getx() &&y==tw[i]->gety()) {count++; break;}
     }
     if (count ==0) return -999;
     else return i;
@@ -162,22 +180,59 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
     int x=event->x();
     int y=event->y();
     QWidget::mousePressEvent(event);
+
+    if (y<=100){    //工具栏，选择塔类型
+    if(x<190 &&x>100){
+      local_x=x;
+      local_y=y;
+      m2p=2;    //拖动的信号
+      type_id=1; //小火龙id
+    }
+    if(x<290 &&x>200){
+      local_x=x;
+      local_y=y;
+      m2p=2;    //拖动的信号
+      type_id=2; //迷你龙id
+    }
+    if(x<390 &&x>300){
+      local_x=x;
+      local_y=y;
+      m2p=2;    //拖动的信号
+      type_id=3; //杰尼龟id
+    }
+    repaint();
+    }
+
+    if (y>100) {   //在工具栏下面才能操作
     if (event->button()==Qt::LeftButton){                                     //左键添加，有喷火龙则不加
         if (m2p==0)      //等于0可以建塔，否则在某一个塔的选项模式
-        {if (no_tower(mx, my)<0){    //小于零说明没塔
-            tw.push_back(Tower());
+        {/*
+            if (no_tower(mx, my)<0){    //小于零说明没塔
+            Tower * twp=new Tower();
+            tw.push_back(twp);   //这里压入twp其实是做了一个拷贝
             double fx=static_cast<double>(mx);
             double fy=static_cast<double>(my);
-            tw.back().set(fx, fy);}
+            tw.back()->set(fx, fy);} */
         }
         if(m2p==1){
-            if (x<tw[tw_i].getx()-10 && x>tw[tw_i].getx()-60 && y<tw[tw_i].gety()+60 && y>tw[tw_i].gety()+10){   //删除选项的位置判断
+            if (x<tw[tw_i]->getx()-10
+                    && x>tw[tw_i]->getx()-60
+                    && y<tw[tw_i]->gety()+60
+                    && y>tw[tw_i]->gety()+10){   //删除选项的位置判断，注意指针记得释放指向对象的内存
+                delete tw[tw_i];  //虽然tw[tw_i]是对应的原来的twp的拷贝，但是delete同样也起到了释放指向塔对象内存的作用
                 tw.erase(tw.begin()+tw_i);
+                m2p=0;  //非常重要！！！这里如果不化为0，则会重复删除导致内存泄漏
             }
-            if (x<tw[tw_i].getx()+60 && x>tw[tw_i].getx()+10 && y<tw[tw_i].gety()-10 && y>tw[tw_i].gety()-60){
-                tw[tw_i].levelup();
+            if (x<tw[tw_i]->getx()+60
+                    && x>tw[tw_i]->getx()+10
+                    && y<tw[tw_i]->gety()-10
+                    && y>tw[tw_i]->gety()-60){
+                tw[tw_i]->levelup();
             }
-            if(x<tw[tw_i].getx()+150 && x>tw[tw_i].getx()+100 && y<tw[tw_i].gety()+60 && y>tw[tw_i].gety()+10){
+            if(x<tw[tw_i]->getx()+150
+                    && x>tw[tw_i]->getx()+100
+                    && y<tw[tw_i]->gety()+60
+                    && y>tw[tw_i]->gety()+10){
                 m2p=0;
             }
             repaint();
@@ -192,10 +247,32 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
         repaint();
     }
 }
+}
 
-void MainWindow::mouseReleaseEvent(QMouseEvent *event){}
 
-void MainWindow::mouseMoveEvent(QMouseEvent *event){}
+void MainWindow::mouseMoveEvent(QMouseEvent *event){
+    if (m2p==2){
+        local_x=event->x()-40;
+        local_y=event->y()-40;
+        repaint();
+    }
+}
+
+void MainWindow::mouseReleaseEvent(QMouseEvent *event){
+    if(m2p==2){
+    m2p=0;
+    int mx=event->x()-event->x()%100;
+    int my=event->y()-event->y()%100;
+    Tower * twp;
+    if (type_id==1) twp=new Tower();
+    if (type_id==2) twp=new Tower2();
+    if (type_id==3) twp=new Tower3();
+    tw.push_back(twp);   //这里压入twp其实是做了一个拷贝
+    double fx=static_cast<double>(mx);
+    double fy=static_cast<double>(my);
+    tw.back()->set(fx, fy);
+    }
+}
 
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *event){    //双击实现升级：威力变大
     //int x=event->x();

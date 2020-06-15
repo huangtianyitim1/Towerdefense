@@ -31,7 +31,8 @@ SOURCES += \
     enemy_s.cpp \
     map1.cpp \
     tower.cpp \
-    start_window.cpp
+    start_window.cpp \
+    tower_s.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -40,7 +41,8 @@ HEADERS += \
     enemy_s.h \
     map1.h \
     tower.h \
-    start_window.h
+    start_window.h \
+    tower_s.h
 
 FORMS += \
         mainwindow.ui \

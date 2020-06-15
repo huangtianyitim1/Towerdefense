@@ -12,6 +12,7 @@
 #include"tower.h"
 #include<QString>
 #include"enemy_s.h"
+#include"tower_s.h"
 
 using namespace std;
 
@@ -38,6 +39,12 @@ protected:
     void mouseMoveEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
     void mouseDoubleClickEvent(QMouseEvent *event);
+    //void dragEnterEvent(QDragEnterEvent *event);
+    //void dropEvent(QDropEvent *event);
+
+
+private slots:
+    void recieve_start();
 
 private:
     Ui::MainWindow *ui;
@@ -56,11 +63,14 @@ private:
     static int e_spd4;  //子弹移动刷新频率
     map1 m1;
     QTime time;
-    vector <Tower> tw;
+    vector <Tower *> tw;
     int score=0;    //分数
     QString s_score;  //分数文字
     int m2p=0;   //鼠标和画图连接的信号
     int tw_i;  //塔的索引记录
+    QImage type1_pic, type2_pic, type3_pic;
+    int local_x, local_y;  //针对=拖动用的鼠标位置
+    int type_id; //塔的种类
 };
 
 #endif // MAINWINDOW_H

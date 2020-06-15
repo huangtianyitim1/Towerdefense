@@ -6,21 +6,26 @@ const int Tower::h=85;
 void Tower::set(double x, double y){
     this->x=x;
     this->y=y;
+    range=200;  //范围
+    spd=5; //子弹射速，可以升级，一般不用
+    power=2;  //子弹威力，升级加大
+    picture=":/images/xiaohuolong.png";
+    id=0;
 }
 
-void Tower::loadimage(){
-    pic_t.load(":/images/penhuolong.png");
+void Tower::loadimage(const QString&s){
+    pic_t.load(s);
 }
 
 void Tower::show(QPainter &p){
-    loadimage();
+    loadimage(picture);
     QRect target(x,y,w,h);
     p.drawImage(target, pic_t);
     for (int i=0; i<bs.size(); i++){
         bs[i].show(p);
     }
     QString s_level="Level:"+QString::number(level);
-    p.drawText(x+10, y-10,200,50,1, s_level);
+    p.drawText(x+10, y-15,200,50,1, s_level);
 }
 
 void Tower::getenemy(vector<Enemy *> &es){
@@ -56,6 +61,10 @@ void Tower::attack(){
 }
 
 void Tower::levelup(){
+    if(level<9){
     level++;
-    power=power+10;          //升级加威力
+    power=power+1;          //升级加威力
+    if (level==4) {picture=":/images/huokonglong.png"; power=power+4;}
+    if(level==9) {picture=":/images/penhuolong.png"; power=power+7;}
+    }
 }

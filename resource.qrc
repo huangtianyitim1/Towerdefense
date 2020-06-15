@@ -34,5 +34,12 @@
         <file>images/chanzi.png</file>
         <file>images/quxiao.png</file>
         <file>images/shengji.png</file>
+        <file>images/huokonglong.png</file>
+        <file>images/xiaohuolong.png</file>
+        <file>images/hakelong.png</file>
+        <file>images/minilong.png</file>
+        <file>images/jienigui.png</file>
+        <file>images/kamigui.png</file>
+        <file>images/shuijiangui.png</file>
     </qresource>
 </RCC>
