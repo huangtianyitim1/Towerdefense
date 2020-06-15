@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>460</width>
     <height>300</height>
    </rect>
   </property>
@@ -23,8 +23,7 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">font: 14pt &quot;造字工房力黑（非商用）常规体&quot;;
-background-color: rgb(255, 85, 0);</string>
+    <string notr="true">font: 14pt &quot;造字工房力黑（非商用）常规体&quot;;</string>
    </property>
    <property name="text">
     <string>开始游戏</string>

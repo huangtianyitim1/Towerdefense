@@ -127,25 +127,27 @@ void MainWindow::timerEvent(QTimerEvent *e){
 }
 
 
-bool MainWindow::no_tower(int x, int y){
-    int count=0;
-    for (int i=0; i<tw.size(); i++){
-        if (x==tw[i].getx() &&y==tw[i].gety()) count++;
+int MainWindow::no_tower(int x, int y){
+    int count=0, i=0;
+    for (; i<tw.size(); i++){
+        if (x==tw[i].getx() &&y==tw[i].gety()) {count++; break;}
     }
-    if (count ==0) return true;
-    else return false;
+    if (count ==0) return -999;
+    else return i;
 }
+
+
 
 void MainWindow::mousePressEvent(QMouseEvent *event){
     int mx=event->x();
     int my=event->y();
-    mx=mx-mx%100;  //90边长为一个单位？？
+    mx=mx-mx%100;  //90边长为一个单位？？      //mx和my都已经经过了取100整处理
     my=my-my%100;
     int x=event->x();
     int y=event->y();
     QWidget::mousePressEvent(event);
     if (event->button()==Qt::LeftButton){                                     //左键添加，有喷火龙则不加
-        if (no_tower(mx, my)){
+        if (no_tower(mx, my)<0){    //小于零说明没塔
             tw.push_back(Tower());
             double fx=static_cast<double>(mx);
             double fy=static_cast<double>(my);
@@ -163,12 +165,11 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event){}
 
 void MainWindow::mouseMoveEvent(QMouseEvent *event){}
 
-void MainWindow::mouseDoubleClickEvent(QMouseEvent *event){    //双击实现升级：射速变快
+void MainWindow::mouseDoubleClickEvent(QMouseEvent *event){    //双击实现升级：威力变大
     int x=event->x();
     int y=event->y();
-    for (int i=0; i<tw.size(); i++){
-        if (tw[i].getx()+60>x && tw[i].getx()+20<x && tw[i].gety()+70>y
-                && tw[i].gety()+20<y) {tw[i].levelup();
-            }
+    int mx=x-x%100;
+    int my=y-y%100;
+    if (no_tower(mx,my)>=0){ int i=no_tower(mx,my); tw[i].levelup();
 }
 }
