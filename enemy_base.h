@@ -18,6 +18,7 @@ protected:
     int hp;               //血量
     int allhp;         //总血量
     int e_score;   //一个敌人多少分
+    int type_id;   //敌人种类id
     //vector<Bullet *> bs;     //敌人也可以装弹
 
 public:
@@ -36,5 +37,6 @@ public:
     bool die();   //是否被消灭
     int gethp() const{return hp;}
     int get_score() const {return e_score;}
+    int get_id() const {return type_id;}   //敌人id获取
 };
 #endif // ENEMY_BASE_H

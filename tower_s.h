@@ -10,6 +10,7 @@ public:
     virtual ~Tower2(){}
     void levelup();
     void set(double x, double y);
+    void getenemy(vector<Enemy *> &es);
 };
 
 class Tower3: public Tower{
@@ -18,6 +19,7 @@ class Tower3: public Tower{
     ~Tower3(){}
     void levelup();
     void set(double x, double y);
+    void getenemy(vector<Enemy *> &es);
 };
 
 #endif // TOWER_S_H

@@ -32,7 +32,8 @@ SOURCES += \
     map1.cpp \
     tower.cpp \
     start_window.cpp \
-    tower_s.cpp
+    tower_s.cpp \
+    bullet_s.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -42,7 +43,8 @@ HEADERS += \
     map1.h \
     tower.h \
     start_window.h \
-    tower_s.h
+    tower_s.h \
+    bullet_s.h
 
 FORMS += \
         mainwindow.ui \

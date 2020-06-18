@@ -41,5 +41,7 @@
         <file>images/jienigui.png</file>
         <file>images/kamigui.png</file>
         <file>images/shuijiangui.png</file>
+        <file>images/leiqiu.png</file>
+        <file>images/shuiqiu.png</file>
     </qresource>
 </RCC>

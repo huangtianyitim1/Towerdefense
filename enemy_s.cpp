@@ -7,6 +7,7 @@ void Enemy1::set(double x, double y) {
     this->allhp=200;
     this->hp=allhp;             //初始hp，会扣
     this->e_score=150;
+    type_id=1;
 }
 
 void Enemy1::loadimage(){
@@ -24,6 +25,7 @@ void Enemy2::set(double x, double y) {
     this->allhp=150;
     this->hp=allhp;             //初始hp，会扣
     this->e_score=100;
+    type_id=2;
 }
 
 void Enemy2::loadimage(){
@@ -41,6 +43,7 @@ void Enemy3::set(double x, double y) {
     this->allhp=300;
     this->hp=allhp;             //初始hp，会扣
     this->e_score=200;
+    type_id=3;
 }
 
 void Enemy3::loadimage(){
@@ -58,6 +61,7 @@ void Enemy4::set(double x, double y) {
     this->allhp=350;
     this->hp=allhp;             //初始hp，会扣
     this->e_score=500;
+    type_id=4;
 }
 
 void Enemy4::loadimage(){
@@ -75,6 +79,7 @@ void Enemy5::set(double x, double y) {
     this->allhp=150;
     this->hp=allhp;             //初始hp，会扣
     this->e_score=150;
+    type_id=5;
 }
 
 void Enemy5::loadimage(){
@@ -92,6 +97,7 @@ void Enemy6::set(double x, double y) {
     this->allhp=250;
     this->hp=allhp;             //初始hp，会扣
     this->e_score=400;
+    type_id=6;
 }
 
 void Enemy6::loadimage(){

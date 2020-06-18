@@ -22,7 +22,7 @@ void Tower::show(QPainter &p){
     QRect target(x,y,w,h);
     p.drawImage(target, pic_t);
     for (int i=0; i<bs.size(); i++){
-        bs[i].show(p);
+        bs[i]->show(p);
     }
     QString s_level="Level:"+QString::number(level);
     p.drawText(x+10, y-15,200,50,1, s_level);
@@ -41,21 +41,27 @@ void Tower::getenemy(vector<Enemy *> &es){
         this->ex=es[ei]->getx();
         this->ey=es[ei]->gety();//否则，定位到第ei个敌人(-1)
         //cout<<ex<<"------"<<ey<<endl;
-        bs.push_back(Bullet());
-        bs.back().set(x+30, y+30, es[ei]);
-        bs.back().setspd(spd);     //初始化子弹的射速
-        bs.back().setpower(power);
+        Bullet *bp=new Bullet();
+        bs.push_back(bp);
+        bs.back()->set(x+30, y+30, es[ei]);
+        bs.back()->setspd(spd);     //初始化子弹的射速
+        int tmp_power=power;      //自己的临时威力，面对不同敌人会不同，但本来power只和等级有关
+        if (es[ei]->get_id()==2 ||es[ei]->get_id()==6 ) tmp_power=power*1.5;
+        if (es[ei]->get_id()==3 ||es[ei]->get_id()==4 ) tmp_power=power*0.5;
+        bs.back()->setpower(tmp_power);  //子弹的威力设置，由自己目前的威力决定
             }
 }
 
 void Tower::attack(){
     for(int i=0; i<bs.size(); i++){         //每颗子弹都移动, 自己的方向已经设置好了
-        bs[i].move();
-        if (bs[i].shootdown()){
+        bs[i]->move();
+        if (bs[i]->shootdown()){
+            delete bs[i];         //删除子弹对象占有的内存
             bs.erase(bs.begin()+i);                  //打中扣血，子弹消失
         }
-        else if (bs[i].getx()>960 || bs[i].gety()>540 || bs[i].getx()<0 || bs[i].gety()<0){
-            bs.erase(bs.begin()+i);
+        else if (bs[i]->getx()>960 || bs[i]->gety()>540 || bs[i]->getx()<0 || bs[i]->gety()<0){
+            delete bs[i];                      //删除子弹对象占有的内存
+            bs.erase(bs.begin()+i);          //到界外了，删除
         }
     }
 }

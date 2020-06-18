@@ -117,9 +117,10 @@ void MainWindow::draw(QPainter &p){
 
     if(m2p==2){
         QRect size(local_x,local_y,80,80);
-        if (type_id==1) p.drawImage(size, type1_pic);
-        if (type_id==2) p.drawImage(size, type2_pic);
-        if (type_id==3) p.drawImage(size, type3_pic);
+        p.setBrush(Qt::NoBrush);
+        if (type_id==1) {p.drawImage(size, type1_pic); p.drawEllipse(QPoint(local_x+40, local_y+40), 200, 200);}   //–°ª¡˙…‰≥Ã200
+        if (type_id==2) {p.drawImage(size, type2_pic); p.drawEllipse(QPoint(local_x+40, local_y+40), 180, 180);}  //  2∫≈À˛√‘ƒ„¡˙…‰≥Ã180
+        if (type_id==3) {p.drawImage(size, type3_pic); p.drawEllipse(QPoint(local_x+40, local_y+40), 200, 200);}  //  3∫≈À˛Ω‹ƒ·πÍ…‰≥Ã200
     }
 }
 
