@@ -66,6 +66,7 @@ void MainWindow::initgame(){
     type1_pic.load(":/images/xiaohuolong.png");
     type2_pic.load(":/images/minilong.png");
     type3_pic.load(":/images/jienigui.png");
+    type4_pic.load(":/images/leixilamu.png");
     e1.push_back(gen_enemy());
     e1[0]->set(start_x,start_y);//初始位置
 }
@@ -87,12 +88,14 @@ void MainWindow::paintEvent(QPaintEvent *){
     //dot.load(":/images/apple.png");
     //p.drawImage(target, dot);
     p.drawImage(background, map);    //画背景
-    QRect type1(100,10,80,80);
+    QRect type1(100,10,50,50);
     p.drawImage(type1, type1_pic);   //画可选塔1：小火龙
-    QRect type2(200,10,80,80);
+    QRect type2(160,10,50,50);
     p.drawImage(type2, type2_pic);   //画可选塔2：迷你龙
-    QRect type3(300,10,80,80);
-    p.drawImage(type3, type3_pic);   //画可选塔2：杰尼龟
+    QRect type3(220,10,50,50);
+    p.drawImage(type3, type3_pic);   //画可选塔3：杰尼龟
+    QRect type4(280,10,50,50);
+    p.drawImage(type4, type4_pic);//画可选塔4：雷希拉姆
     //画对象
     draw(p);
 }
@@ -121,6 +124,7 @@ void MainWindow::draw(QPainter &p){
         if (type_id==1) {p.drawImage(size, type1_pic); p.drawEllipse(QPoint(local_x+40, local_y+40), 200, 200);}   //小火龙射程200
         if (type_id==2) {p.drawImage(size, type2_pic); p.drawEllipse(QPoint(local_x+40, local_y+40), 180, 180);}  //  2号塔迷你龙射程180
         if (type_id==3) {p.drawImage(size, type3_pic); p.drawEllipse(QPoint(local_x+40, local_y+40), 200, 200);}  //  3号塔杰尼龟射程200
+        if (type_id==4) {p.drawImage(size, type4_pic); p.drawEllipse(QPoint(local_x+40, local_y+40), 250, 250);}  //  4号塔雷希拉姆射程250
     }
 }
 
@@ -183,23 +187,29 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
     QWidget::mousePressEvent(event);
 
     if (y<=100){    //工具栏，选择塔类型
-    if(x<190 &&x>100){
+    if(x<140 &&x>100){
       local_x=x;
       local_y=y;
       m2p=2;    //拖动的信号
       type_id=1; //小火龙id
     }
-    if(x<290 &&x>200){
+    if(x<200 &&x>160){
       local_x=x;
       local_y=y;
       m2p=2;    //拖动的信号
       type_id=2; //迷你龙id
     }
-    if(x<390 &&x>300){
+    if(x<260 &&x>220){
       local_x=x;
       local_y=y;
       m2p=2;    //拖动的信号
       type_id=3; //杰尼龟id
+    }
+    if(x<320 &&x>280){
+      local_x=x;
+      local_y=y;
+      m2p=2;    //拖动的信号
+      type_id=4; //雷希拉姆id
     }
     repaint();
     }
@@ -268,6 +278,7 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event){
     if (type_id==1) twp=new Tower();
     if (type_id==2) twp=new Tower2();
     if (type_id==3) twp=new Tower3();
+    if (type_id==4) twp=new Tower4();
     tw.push_back(twp);   //这里压入twp其实是做了一个拷贝
     double fx=static_cast<double>(mx);
     double fy=static_cast<double>(my);

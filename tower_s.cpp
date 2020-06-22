@@ -88,3 +88,60 @@ void Tower3::getenemy(vector<Enemy *> &es){
             }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
+void Tower4::set(double x, double y){
+    this->x=x;
+    this->y=y;
+    range=20;  //范围
+    spd=1; //光圈射速，可以升级，一般不用
+    power=5;  //子弹威力，升级加大
+    picture=":/images/leixilamu.png";
+    id=4;
+}
+
+void Tower4::levelup(){
+    if(level<5){
+    level++;
+    power=power+2;          //升级加威力
+    }
+}
+
+void Tower4::getenemy(vector<Enemy *> &es){
+    e_in=0; //判断范围内是否有敌人的信号
+
+    for(int ei=0; ei<es.size(); ei++){
+        //cout<<es.size()<<endl;
+        double d=(es[ei]->getx()-x)*(es[ei]->getx()-x)+(es[ei]->gety()-y)*(es[ei]->gety()-y);    //平方距离
+        if(d<250*250) {/*cout<<ei<<endl;*/e_in=1;  break;}  //此时有敌人进入范围，250的信号范围
+    }
+
+    for(int ei=0; ei<es.size(); ei++){
+        //cout<<es.size()<<endl;
+        if(e_in ==1){         //有信号才开始攻击
+        double d=(es[ei]->getx()-x)*(es[ei]->getx()-x)+(es[ei]->gety()-y)*(es[ei]->gety()-y);    //平方距离
+        if(d<range*range) {
+            es[ei]->hpminus(power);
+        }  //在光圈内，受到伤害
+    }
+    }
+
+    //cout<<ei<<endl;
+}
+
+void Tower4::attack(){
+    if (e_in==1){
+        if (range<150) range=range+spd;
+        if (range>=150) range=20;
+    }
+}
+
+void Tower4::show(QPainter &p){
+    loadimage(picture);
+    QRect target(x,y,w,h);
+    p.drawImage(target, pic_t);
+    QImage circle;
+    circle.load(":/images/guangquan.png");
+    QRect size(x+40-range, y+40-range, 2*range, 2*range);
+    p.drawImage(size, circle);   //画光圈
+    QString s_level="Level:"+QString::number(level);
+    p.drawText(x+10, y-15,200,50,1, s_level);
+}

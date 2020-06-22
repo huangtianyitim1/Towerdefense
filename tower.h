@@ -26,18 +26,19 @@ protected:
     double power;  //子弹威力，升级加大
     QString picture;
     int id;    //种类
+    int e_in;  //范围内是否有敌人，光圈塔专用
 public:
     Tower(){}
     virtual ~Tower(){}
     const static int w,h;    //图片大小
     virtual void set(double x, double y);   //位置和
     void setspd(int spd) {this->spd=spd;}             //设置自己的所有的子弹速度，感觉没什么用
-    void show(QPainter&p);
+    virtual void show(QPainter&p);
     void loadimage(const QString &s);
     double getx() const {return x;}
     double gety() const {return y;}
     virtual void getenemy(vector<Enemy *> &es);                   //寻找和锁定敌人，添加一颗子弹朝他发射，传递速度
-    void attack();                     //所有子弹移动，如果打中了删除
+    virtual void attack();                     //所有子弹移动，如果打中了删除
     int getn_bs() const {return bs.size();}                    //the size of bullets
     virtual void levelup();    //升级
     int getid() const {return id;}

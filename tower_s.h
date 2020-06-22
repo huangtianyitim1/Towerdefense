@@ -22,4 +22,15 @@ class Tower3: public Tower{
     void getenemy(vector<Enemy *> &es);
 };
 
+class Tower4: public Tower{
+public:
+    Tower4(){}
+    ~Tower4(){}
+    void levelup();
+    void set(double x, double y);
+    void getenemy(vector<Enemy *> &es);
+    void attack();
+    void show(QPainter &p);
+};
+
 #endif // TOWER_S_H

@@ -68,7 +68,7 @@ private:
     QString s_score;  //分数文字
     int m2p=0;   //鼠标和画图连接的信号
     int tw_i;  //塔的索引记录
-    QImage type1_pic, type2_pic, type3_pic;
+    QImage type1_pic, type2_pic, type3_pic, type4_pic;    //塔的种类菜单栏图
     int local_x, local_y;  //针对=拖动用的鼠标位置
     int type_id; //塔的种类
 };
