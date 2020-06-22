@@ -8,6 +8,8 @@ void Tower2::set(double x, double y){
     power=5;  //子弹威力，升级加大
     picture=":/images/minilong.png";
     id=2;
+    allhp=10;
+    hp=allhp;
 }
 
 
@@ -52,6 +54,8 @@ void Tower3::set(double x, double y){
     power=2;  //子弹威力，升级加大
     picture=":/images/jienigui.png";
     id=3;
+    allhp=10;
+    hp=allhp;
 }
 
 
@@ -96,10 +100,12 @@ void Tower4::set(double x, double y){
     power=5;  //子弹威力，升级加大
     picture=":/images/leixilamu.png";
     id=4;
+    allhp=10;
+    hp=allhp;
 }
 
 void Tower4::levelup(){
-    if(level<5){
+    if(level<7){
     level++;
     power=power+2;          //升级加威力
     }
@@ -144,4 +150,7 @@ void Tower4::show(QPainter &p){
     p.drawImage(size, circle);   //画光圈
     QString s_level="Level:"+QString::number(level);
     p.drawText(x+10, y-15,200,50,1, s_level);
+    p.setPen(QPen(1));
+    p.setBrush(QBrush(Qt::blue));
+    p.drawRect(x+75, y+10, 5,50*hp/allhp); //画血条
 }

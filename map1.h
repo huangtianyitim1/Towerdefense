@@ -1,6 +1,7 @@
 #ifndef MAP1_H
 #define MAP1_H
 #include"enemy_s.h"
+//class Enemy;
 class map1{
 private:
     double x,y;

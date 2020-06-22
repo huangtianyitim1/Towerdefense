@@ -25,7 +25,7 @@ class Tower3: public Tower{
 class Tower4: public Tower{
 public:
     Tower4(){}
-    ~Tower4(){}
+    ~Tower4(){cout<<"delete 4"<<endl;}
     void levelup();
     void set(double x, double y);
     void getenemy(vector<Enemy *> &es);

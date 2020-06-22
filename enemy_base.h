@@ -6,6 +6,8 @@
 #include <QMouseEvent>
 #include <QMediaPlayer>
 #include <iostream>
+//#include<tower.h>
+//#include"bullet.h"
 using namespace std;
 //血的教训：不要互相引用，不好hold住，最后可能混在一起遮盖什么
 class Enemy{
@@ -38,5 +40,7 @@ public:
     int gethp() const{return hp;}
     int get_score() const {return e_score;}
     int get_id() const {return type_id;}   //敌人id获取
+    //virtual void gettower(vector <Tower *> &ts){}   //搜寻塔，攻击
+    //virtual void attack(){}  //子弹移动
 };
 #endif // ENEMY_BASE_H

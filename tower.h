@@ -12,7 +12,8 @@
 #include <string>
 #include"bullet_s.h"
 using namespace std;
-
+//class Enemy;
+//class Bullet;
 class Tower{
 protected:
     double x,y;  //位置
@@ -27,6 +28,8 @@ protected:
     QString picture;
     int id;    //种类
     int e_in;  //范围内是否有敌人，光圈塔专用
+    int hp;  //自己的即时血量
+    int allhp; //初始血量
 public:
     Tower(){}
     virtual ~Tower(){}
@@ -43,5 +46,7 @@ public:
     virtual void levelup();    //升级
     int getid() const {return id;}
     double get_range() const {return range;}
+    void hp_minus(int p);
+    int get_hp() const{return hp;}   //小于等于0判定为死亡
 };
 #endif // TOWER_H

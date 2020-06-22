@@ -1,7 +1,7 @@
 #include"enemy_base.h"
 
-int Enemy::h=80;
-int Enemy::w=80;
+int Enemy::h=70;
+int Enemy::w=70;
 
 
 void Enemy::show(QPainter&p){
@@ -10,7 +10,7 @@ void Enemy::show(QPainter&p){
     p.drawImage(target, pic_e);
     p.setPen(QPen(1));
     p.setBrush(QBrush(Qt::red));
-    p.drawRect(x+10, y-10, 60*hp/allhp, 5);             //画血条
+    p.drawRect(x+5, y-10, 50*hp/allhp, 5);             //画血条
 }
 
 void Enemy::setspd(double s){
@@ -44,7 +44,7 @@ void Enemy::change_dir(int d){
     this->direction=d;
 }
 
-void Enemy::hpminus(int p){
+void Enemy::hpminus(int p){  //扣得血量为子弹力量
     hp-=p;
 }
 

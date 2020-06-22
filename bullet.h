@@ -23,7 +23,7 @@ protected:
     int type_id;     //子弹种类id
 public:
     Bullet(){}
-    virtual~Bullet(){cout<<"delete bullet"<<endl;}
+    virtual~Bullet(){}
     virtual void set(double x, double y, Enemy *p);  //位置  和锁定的敌人
     double getdir() const {return dir;}             //返回方向
     void setspd(double s);                      //设置速度

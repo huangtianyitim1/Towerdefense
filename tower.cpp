@@ -1,7 +1,7 @@
 #include"tower.h"
 
-const int Tower::w=85;
-const int Tower::h=85;
+const int Tower::w=70;
+const int Tower::h=70;
 
 void Tower::set(double x, double y){
     this->x=x;
@@ -11,6 +11,8 @@ void Tower::set(double x, double y){
     power=2;  //子弹威力，升级加大
     picture=":/images/xiaohuolong.png";
     id=0;
+    allhp=10;
+    hp=allhp;
 }
 
 void Tower::loadimage(const QString&s){
@@ -25,7 +27,10 @@ void Tower::show(QPainter &p){
         bs[i]->show(p);
     }
     QString s_level="Level:"+QString::number(level);
-    p.drawText(x+10, y-15,200,50,1, s_level);
+    p.drawText(x+10, y-25,200,50,1, s_level);
+    p.setPen(QPen(1));
+    p.setBrush(QBrush(Qt::blue));
+    p.drawRect(x+75, y+10, 5,50*hp/allhp); //画血条
 }
 
 void Tower::getenemy(vector<Enemy *> &es){
@@ -73,4 +78,8 @@ void Tower::levelup(){
     if (level==4) {picture=":/images/huokonglong.png"; power=power+4;}
     if(level==9) {picture=":/images/penhuolong.png"; power=power+7;}
     }
+}
+
+void Tower::hp_minus(int p){           //扣的血为子弹威力
+    hp-=p;
 }

@@ -6,7 +6,7 @@ public:
     Bullet2(){}
     void set(double x, double y, Enemy *p);
     void loadimage();
-    ~Bullet2(){cout<<"delete bullet2"<<endl;}
+    ~Bullet2(){}
 };
 
 class Bullet3: public Bullet{
@@ -14,7 +14,7 @@ public:
     Bullet3(){}
     void set(double x, double y, Enemy *p);
     void loadimage();
-    ~Bullet3(){cout<<"delete bullet3"<<endl;}
+    ~Bullet3(){}
 };
 
 #endif // BULLET_S_H
