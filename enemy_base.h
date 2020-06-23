@@ -7,7 +7,8 @@
 #include <QMediaPlayer>
 #include <iostream>
 //#include<tower.h>
-//#include"bullet.h"
+//#include"enemy_bullet.h"
+//class Tower;
 using namespace std;
 //血的教训：不要互相引用，不好hold住，最后可能混在一起遮盖什么
 class Enemy{
@@ -21,7 +22,10 @@ protected:
     int allhp;         //总血量
     int e_score;   //一个敌人多少分
     int type_id;   //敌人种类id
-    //vector<Bullet *> bs;     //敌人也可以装弹
+    int range;   //敌人攻击范围
+    double bullet_spd;   //子弹速度
+    int power;     //子弹威力
+    //vector<EBullet *> bs;     //敌人也可以装弹
 
 public:
     Enemy(){}
@@ -40,6 +44,9 @@ public:
     int gethp() const{return hp;}
     int get_score() const {return e_score;}
     int get_id() const {return type_id;}   //敌人id获取
+    int get_range() const{return range;}
+    double get_bullet_spd() const{return bullet_spd;} //子弹速度
+    int get_power() const{return power;}      //子弹威力
     //virtual void gettower(vector <Tower *> &ts){}   //搜寻塔，攻击
     //virtual void attack(){}  //子弹移动
 };

@@ -33,7 +33,8 @@ SOURCES += \
     tower.cpp \
     start_window.cpp \
     tower_s.cpp \
-    bullet_s.cpp
+    bullet_s.cpp \
+    enemy_bullet.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -44,7 +45,8 @@ HEADERS += \
     tower.h \
     start_window.h \
     tower_s.h \
-    bullet_s.h
+    bullet_s.h \
+    enemy_bullet.h
 
 FORMS += \
         mainwindow.ui \

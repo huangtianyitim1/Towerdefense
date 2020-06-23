@@ -62,6 +62,9 @@ void Enemy4::set(double x, double y) {
     this->hp=allhp;             //³õÊ¼hp£¬»á¿Û
     this->e_score=500;
     type_id=4;
+    range=200;
+    bullet_spd=1;
+    power=2;
 }
 
 void Enemy4::loadimage(){

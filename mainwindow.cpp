@@ -7,8 +7,9 @@ int start_x=800;
 int start_y=500;
 int MainWindow::e_spd=20;          //µĞÈËÒÆ¶¯Ë¢ĞÂµÄÆµÂÊ
 int MainWindow::e_spd2=2000;    //µĞÈË²úÉúµÄÆµÂÊ
-int MainWindow::e_spd3=300;     //×Óµ¯²úÉúÆµÂÊ
-int MainWindow::e_spd4=5;        //×Óµ¯ÒÆ¶¯Ë¢ĞÂÆµÂÊ
+int MainWindow::e_spd3=300;     //Ëş×Óµ¯²úÉúÆµÂÊ
+int MainWindow::e_spd4=5;        //Ëş×Óµ¯ÒÆ¶¯Ë¢ĞÂÆµÂÊ
+int MainWindow::e_spd5=1500;   //µĞÈË×Óµ¯²úÉúÆµÂÊ
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -56,6 +57,7 @@ void MainWindow::initgame(){
     timerid2=startTimer(e_spd2);   //Ë¢ĞÂµĞÈËÊıÁ¿
     timerid3=startTimer(e_spd3);  //×Óµ¯²úÉú
     timerid4=startTimer(e_spd4);  //×Óµ¯ÒÆ¶¯
+    timerid5=startTimer(e_spd5);  //µĞÈË×Óµ¯²úÉú
     //tw.push_back(Tower());     Ò»¿ªÊ¼µÄÒ»¸öËş
     //tw[0].set(400,320);
     //¼ÓÔØºÃµØÍ¼¡¢Ñ¡ÏîÍ¼±ê
@@ -117,7 +119,6 @@ void MainWindow::draw(QPainter &p){
         QRect op3 (tw[tw_i]->getx()+100, tw[tw_i]->gety()+10, 50, 50);
         p.drawImage(op3, cancel);
     }
-
     if(m2p==2){
         QRect size(local_x,local_y,80,80);
         p.setBrush(Qt::NoBrush);
@@ -125,6 +126,10 @@ void MainWindow::draw(QPainter &p){
         if (type_id==2) {p.drawImage(size, type2_pic); p.drawEllipse(QPoint(local_x+40, local_y+40), 180, 180);}  //  2ºÅËşÃÔÄãÁúÉä³Ì180
         if (type_id==3) {p.drawImage(size, type3_pic); p.drawEllipse(QPoint(local_x+40, local_y+40), 200, 200);}  //  3ºÅËş½ÜÄá¹êÉä³Ì200
         if (type_id==4) {p.drawImage(size, type4_pic); p.drawEllipse(QPoint(local_x+40, local_y+40), 250, 250);}  //  4ºÅËşÀ×Ï£À­Ä·Éä³Ì250
+    }
+
+    for (int i=0; i<ebs.size(); i++){
+    ebs[i]->show(p);      //µĞÈËµÄ×Óµ¯µ¥¶À»­
     }
 }
 
@@ -142,6 +147,12 @@ void MainWindow::timerEvent(QTimerEvent *e){
                 e1.erase(e1.begin()+i);   //É¾³ıÊı×éµÄÖ¸ÕëÔªËØ
             }
         }
+        for (int i=0; i<tw.size();i++){    //¼ì²â ËşÊÇ·ñÕóÍö
+            if (tw[i]->get_hp()<=0){
+                delete tw[i];
+                tw.erase(tw.begin()+i);
+            }
+        }
     }
     if(id==timerid2){
         if (e1.size()<7){
@@ -156,11 +167,17 @@ void MainWindow::timerEvent(QTimerEvent *e){
     if(id==timerid3){
         for(int i=0; i<tw.size(); i++){
         tw[i]->getenemy(e1);
-        tw[i]->attack();}
+        tw[i]->attack();
+        }
     }
     if(id==timerid4){
         for(int i=0; i<tw.size(); i++){
         tw[i]->attack();}
+        ebattack();
+    }
+    if(id==timerid5){
+        gettower(tw);
+        ebattack();
     }
     repaint();  //ºÍÉÏÃæµÄ½áºÏÆğÀ´¿´£¬Ã¿Ò»¶¨Ê±¼äË¢ĞÂµ÷ÓÃÒ»´Îpainteventº¯Êı
 }
@@ -292,5 +309,48 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event){    //Ë«»÷ÊµÏÖÉı¼¶£ºÍ
     //int mx=x-x%100;
     //int my=y-y%100;
     //if (no_tower(mx,my)>=0){ int i=no_tower(mx,my); tw[i].levelup();
+}
+
+
+void MainWindow::gettower(vector <Tower*> es){       //µĞÈËµÄ½ø¹¥ÔÚÖ÷½çÃæÊµÏÖ
+    for (int i=0; i<e1.size(); i++){
+        if (e1[i]->get_id()==4){
+            int x=e1[i]->getx();
+            int y=e1[i]->gety();
+        int ei=0;
+        for(; ei<es.size(); ei++){
+            //cout<<es.size()<<endl;
+            double d=(es[ei]->getx()-x)*(es[ei]->getx()-x)+(es[ei]->gety()-y)*(es[ei]->gety()-y);    //Æ½·½¾àÀë
+            if(d<es[ei]->get_range()*es[ei]->get_range()) {/*cout<<ei<<endl;*/  break;}
+        }
+        //cout<<ei<<endl;
+        if (ei==es.size()) ei=9999;   //ËµÃ÷Ã»ÓĞ·¢ÏÖµĞÈË
+        else {
+            double ex=es[ei]->getx();
+            double ey=es[ei]->gety();//·ñÔò£¬¶¨Î»µ½µÚei¸öµĞÈË(-1)
+            //cout<<ex<<"------"<<ey<<endl;
+            EBullet *bp=new EBullet();
+            ebs.push_back(bp);
+            ebs.back()->set(x+30, y+30, es[ei]);
+            ebs.back()->setspd(e1[i]->get_bullet_spd());     //³õÊ¼»¯×Óµ¯µÄÉäËÙ
+            ebs.back()->setpower(e1[i]->get_power());   //×Óµ¯ÍşÁ¦
+            cout<<"launch"<<endl;
+                }
+        }
+    }
+}
+
+void MainWindow::ebattack(){
+    for(int i=0; i<ebs.size(); i++){         //Ã¿¿Å×Óµ¯¶¼ÒÆ¶¯, ×Ô¼ºµÄ·½ÏòÒÑ¾­ÉèÖÃºÃÁË
+        ebs[i]->move();
+        if (ebs[i]->shootdown()){
+            delete ebs[i];         //É¾³ı×Óµ¯¶ÔÏóÕ¼ÓĞµÄÄÚ´æ
+            ebs.erase(ebs.begin()+i);                  //´òÖĞ¿ÛÑª£¬×Óµ¯ÏûÊ§
+        }
+        else if (ebs[i]->getx()>960 || ebs[i]->gety()>540 || ebs[i]->getx()<0 || ebs[i]->gety()<0){
+            delete ebs[i];                      //É¾³ı×Óµ¯¶ÔÏóÕ¼ÓĞµÄÄÚ´æ
+            ebs.erase(ebs.begin()+i);          //µ½½çÍâÁË£¬É¾³ı
+        }
+    }
 }
 

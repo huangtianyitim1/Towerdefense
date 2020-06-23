@@ -28,12 +28,12 @@ public:
     void loadimage();
 };
 
-class Enemy4: public Enemy{
+class Enemy4: public Enemy{           //特殊种类：会发射炮弹
 protected:
 public:
     Enemy4(){}
     ~Enemy4();
-    void set(double x, double y);                  //设置速度和这一刻位置、初始血量
+    void set(double x, double y);                  //设置速度和这一刻位置、初始血量、炮弹威力速度
     void loadimage();
 };
 

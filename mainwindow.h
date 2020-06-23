@@ -13,6 +13,7 @@
 #include<QString>
 #include"enemy_s.h"
 #include"tower_s.h"
+#include"enemy_bullet.h"
 
 using namespace std;
 
@@ -31,6 +32,8 @@ public:
     void draw(QPainter &p);
     Enemy* gen_enemy();    //返回一个指向某一子类敌人的基类指针
     int no_tower(int x, int y);   //判断这里 是否有塔，没有返回-999，有的话返回当前鼠标塔的索引
+    void gettower(vector<Tower *> es);     //逻辑：给敌人的子弹设置好起点终点
+    void ebattack();    //敌人子弹进攻
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -61,9 +64,12 @@ private:
     static int e_spd3;  //子弹产生频率
     int timerid4;  //子弹刷新移动id
     static int e_spd4;  //子弹移动刷新频率
+    int timerid5;  //敌人子弹刷新移动id
+    static int e_spd5;  //敌人子弹移动刷新频率
     map1 m1;
     QTime time;
     vector <Tower *> tw;
+    vector <EBullet *>ebs;   //敌人的子弹避免互相引用，直接放主界面
     int score=0;    //分数
     QString s_score;  //分数文字
     int m2p=0;   //鼠标和画图连接的信号
