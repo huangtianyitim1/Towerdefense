@@ -64,7 +64,7 @@ void Enemy4::set(double x, double y) {
     type_id=4;
     range=200;
     bullet_spd=1;
-    power=2;
+    power=1;
 }
 
 void Enemy4::loadimage(){

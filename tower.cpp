@@ -64,7 +64,7 @@ void Tower::attack(){
             delete bs[i];         //删除子弹对象占有的内存
             bs.erase(bs.begin()+i);                  //打中扣血，子弹消失
         }
-        else if (bs[i]->getx()>960 || bs[i]->gety()>540 || bs[i]->getx()<0 || bs[i]->gety()<0){
+        else if (bs[i]->getx()>960 || bs[i]->gety()>600 || bs[i]->getx()<0 || bs[i]->gety()<0){
             delete bs[i];                      //删除子弹对象占有的内存
             bs.erase(bs.begin()+i);          //到界外了，删除
         }

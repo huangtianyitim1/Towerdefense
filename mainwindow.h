@@ -72,9 +72,11 @@ private:
     vector <EBullet *>ebs;   //敌人的子弹避免互相引用，直接放主界面
     int score=0;    //分数
     QString s_score;  //分数文字
-    int m2p=0;   //鼠标和画图连接的信号
+    int m2p=0;   //鼠标和画图连接的信号-------1是右键塔选项触发，2是选择塔种类触发
+    int show_keng=0;   //标识能否画坑
     int tw_i;  //塔的索引记录
     QImage type1_pic, type2_pic, type3_pic, type4_pic;    //塔的种类菜单栏图
+    QImage keng_pic;    //临时画坑
     int local_x, local_y;  //针对=拖动用的鼠标位置
     int type_id; //塔的种类
 };

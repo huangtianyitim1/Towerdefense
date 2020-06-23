@@ -90,12 +90,13 @@ void Tower3::getenemy(vector<Enemy *> &es){
         if (es[ei]->get_id()==2 ) tmp_power=power*0.5;
         bs.back()->setpower(tmp_power);  //子弹的威力设置，由自己目前的威力决定
             }
+
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Tower4::set(double x, double y){
     this->x=x;
     this->y=y;
-    range=20;  //范围
+    range=5;  //范围
     spd=1; //光圈射速，可以升级，一般不用
     power=5;  //子弹威力，升级加大
     picture=":/images/leixilamu.png";
@@ -129,7 +130,7 @@ void Tower4::getenemy(vector<Enemy *> &es){
         }  //在光圈内，受到伤害
     }
     }
-
+    if (e_in==0) range=5;  //没有敌人时，及时更新光圈，缩小到接近于0
     //cout<<ei<<endl;
 }
 

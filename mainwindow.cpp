@@ -4,12 +4,12 @@
 #include<iostream>
 
 int start_x=800;
-int start_y=500;
+int start_y=520;
 int MainWindow::e_spd=20;          //敌人移动刷新的频率
 int MainWindow::e_spd2=2000;    //敌人产生的频率
 int MainWindow::e_spd3=300;     //塔子弹产生频率
 int MainWindow::e_spd4=5;        //塔子弹移动刷新频率
-int MainWindow::e_spd5=1500;   //敌人子弹产生频率
+int MainWindow::e_spd5=1200;   //敌人子弹产生频率
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -61,7 +61,7 @@ void MainWindow::initgame(){
     //tw.push_back(Tower());     一开始的一个塔
     //tw[0].set(400,320);
     //加载好地图、选项图标
-    map.load(":/images/map.jpg");
+    map.load(":/images/map1.png");
     remove.load(":/images/chanzi.png");
     up.load(":/images/shengji.png");
     cancel.load(":/images/quxiao.png");
@@ -69,6 +69,7 @@ void MainWindow::initgame(){
     type2_pic.load(":/images/minilong.png");
     type3_pic.load(":/images/jienigui.png");
     type4_pic.load(":/images/leixilamu.png");
+    keng_pic.load(":/images/keng.png");
     e1.push_back(gen_enemy());
     e1[0]->set(start_x,start_y);//初始位置
 }
@@ -90,13 +91,13 @@ void MainWindow::paintEvent(QPaintEvent *){
     //dot.load(":/images/apple.png");
     //p.drawImage(target, dot);
     p.drawImage(background, map);    //画背景
-    QRect type1(100,10,50,50);
+    QRect type1(110,10,70,70);
     p.drawImage(type1, type1_pic);   //画可选塔1：小火龙
-    QRect type2(160,10,50,50);
+    QRect type2(210,10,70,70);
     p.drawImage(type2, type2_pic);   //画可选塔2：迷你龙
-    QRect type3(220,10,50,50);
+    QRect type3(310,10,70,70);
     p.drawImage(type3, type3_pic);   //画可选塔3：杰尼龟
-    QRect type4(280,10,50,50);
+    QRect type4(410,10,70,70);
     p.drawImage(type4, type4_pic);//画可选塔4：雷希拉姆
     //画对象
     draw(p);
@@ -122,10 +123,12 @@ void MainWindow::draw(QPainter &p){
     if(m2p==2){
         QRect size(local_x,local_y,80,80);
         p.setBrush(Qt::NoBrush);
+        if (show_keng==1) {QRect keng_size(local_x+40-(local_x+40)%100,local_y+40-(local_y+40)%100,100,100); p.drawImage(keng_size, keng_pic); }
         if (type_id==1) {p.drawImage(size, type1_pic); p.drawEllipse(QPoint(local_x+40, local_y+40), 200, 200);}   //小火龙射程200
         if (type_id==2) {p.drawImage(size, type2_pic); p.drawEllipse(QPoint(local_x+40, local_y+40), 180, 180);}  //  2号塔迷你龙射程180
         if (type_id==3) {p.drawImage(size, type3_pic); p.drawEllipse(QPoint(local_x+40, local_y+40), 200, 200);}  //  3号塔杰尼龟射程200
         if (type_id==4) {p.drawImage(size, type4_pic); p.drawEllipse(QPoint(local_x+40, local_y+40), 250, 250);}  //  4号塔雷希拉姆射程250
+
     }
 
     for (int i=0; i<ebs.size(); i++){
@@ -177,7 +180,6 @@ void MainWindow::timerEvent(QTimerEvent *e){
     }
     if(id==timerid5){
         gettower(tw);
-        ebattack();
     }
     repaint();  //和上面的结合起来看，每一定时间刷新调用一次paintevent函数
 }
@@ -198,31 +200,31 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
     int mx=event->x();
     int my=event->y();
     mx=mx-mx%100;  //90边长为一个单位？？      //mx和my都已经经过了取100整处理
-    my=my-my%100;
+    my=my-my%100+20;  //-----------------------------------mx和my都是经过取整百处理，用来判断==，其中my+20了
     int x=event->x();
     int y=event->y();
     QWidget::mousePressEvent(event);
 
-    if (y<=100){    //工具栏，选择塔类型
-    if(x<140 &&x>100){
+    if (y<=100){    ///////////////工具栏，选择塔类型
+    if(x<160 &&x>100){
       local_x=x;
       local_y=y;
       m2p=2;    //拖动的信号
       type_id=1; //小火龙id
     }
-    if(x<200 &&x>160){
+    if(x<260 &&x>200){
       local_x=x;
       local_y=y;
       m2p=2;    //拖动的信号
       type_id=2; //迷你龙id
     }
-    if(x<260 &&x>220){
+    if(x<360 &&x>300){
       local_x=x;
       local_y=y;
       m2p=2;    //拖动的信号
       type_id=3; //杰尼龟id
     }
-    if(x<320 &&x>280){
+    if(x<460 &&x>400){
       local_x=x;
       local_y=y;
       m2p=2;    //拖动的信号
@@ -280,8 +282,9 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
 
 void MainWindow::mouseMoveEvent(QMouseEvent *event){
     if (m2p==2){
-        local_x=event->x()-40;
+        local_x=event->x()-40;     //实际位置为鼠标位置的左上角40单位！！！------------------------
         local_y=event->y()-40;
+        if (local_y>100)  show_keng=1;
         repaint();
     }
 }
@@ -290,7 +293,8 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event){
     if(m2p==2){
     m2p=0;
     int mx=event->x()-event->x()%100;
-    int my=event->y()-event->y()%100;
+    int my=event->y()-event->y()%100+20;   //100取整下来一点
+    if (no_tower(mx,my)<0){
     Tower * twp;
     if (type_id==1) twp=new Tower();
     if (type_id==2) twp=new Tower2();
@@ -300,6 +304,7 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event){
     double fx=static_cast<double>(mx);
     double fy=static_cast<double>(my);
     tw.back()->set(fx, fy);
+    }
     }
 }
 

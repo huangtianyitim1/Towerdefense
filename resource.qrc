@@ -45,5 +45,7 @@
         <file>images/shuiqiu.png</file>
         <file>images/guangquan.png</file>
         <file>images/zuqiu.png</file>
+        <file>images/map1.png</file>
+        <file>images/keng.png</file>
     </qresource>
 </RCC>
