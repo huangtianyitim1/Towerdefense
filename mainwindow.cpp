@@ -87,6 +87,8 @@ void MainWindow::load_next_wave(){
 }
 
 void MainWindow::initgame(){
+    allhp=1000;
+    hp=allhp;
     timerid1=startTimer(e_spd);    //刷新敌人移动
     timerid2=startTimer(e_spd2);   //刷新敌人数量
     timerid3=startTimer(e_spd3);  //子弹产生
@@ -141,7 +143,18 @@ void MainWindow::paintEvent(QPaintEvent *){
 
 void MainWindow::draw(QPainter &p){
     s_score="Score: "+QString::number(score);
-    p.drawText(500, 100,200,50,1, s_score);
+    s_wave="Wave: "+QString::number(wave);
+    s_hp="Hp: "+QString::number(hp);
+    QFont font("Microsoft YaHei", 12, 75);
+    p.setFont(font);
+    p.setPen(Qt::black);
+    p.drawText(720,10,200,50,Qt::AlignLeft,s_score);
+    p.drawText(720,40,200,50,Qt::AlignLeft,s_wave);
+    p.setPen(Qt::red);
+    p.drawText(720, 70, 200,50,Qt::AlignLeft,s_hp);
+    p.setPen(QPen(1));        //家园血条
+    p.setBrush(QBrush(Qt::red));
+    p.drawRect(7, 90, 80*hp/allhp, 7);             //画血条
     if (e1.size()>0){
     for (int i=0; i<e1.size(); i++){
         e1[i]->show(p);
@@ -183,9 +196,14 @@ void MainWindow::timerEvent(QTimerEvent *e){
             e1[i]->move();
             m1.collide_check(e1[i]);
             //cout<<e1[i].gethp()<<endl;
-            if(m1.outbound(e1[i]) || e1[i]->die()){
+            if(e1[i]->die()){
                 score+=e1[i]->get_score();
-                delete e1[i];    //释放指向的敌人对象内存----------------
+                delete e1[i];    //释放指向的敌人对象内存---------------一个问题：没法避免释放两次
+                e1.erase(e1.begin()+i);   //删除数组的指针元素
+            }
+            else if(m1.outbound(e1[i]) ){     //进入家园，家掉血
+                hp-=e1[i]->get_damage();
+                delete e1[i];    //释放指向的敌人对象内存------------
                 e1.erase(e1.begin()+i);   //删除数组的指针元素
             }
         }
@@ -399,4 +417,9 @@ void MainWindow::on_pushButton_clicked()      //暂停游戏
 {
     if (is_on)  is_on=false;
     else is_on=true;
+}
+
+void MainWindow::on_label_windowIconTextChanged(const QString &iconText)
+{
+
 }

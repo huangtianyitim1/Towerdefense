@@ -149,6 +149,8 @@ void Tower4::show(QPainter &p){
     circle.load(":/images/guangquan.png");
     QRect size(x+40-range, y+40-range, 2*range, 2*range);
     p.drawImage(size, circle);   //ª≠π‚»¶
+    QFont font("Microsoft YaHei", 9, 75);
+    p.setFont(font);
     QString s_level="Level:"+QString::number(level);
     p.drawText(x+10, y-15,200,50,1, s_level);
     p.setPen(QPen(1));

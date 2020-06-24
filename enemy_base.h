@@ -25,6 +25,7 @@ protected:
     int range;   //敌人攻击范围
     double bullet_spd;   //子弹速度
     int power;     //子弹威力
+    int damage;    //对家的损失
     //vector<EBullet *> bs;     //敌人也可以装弹
 
 public:
@@ -47,6 +48,7 @@ public:
     int get_range() const{return range;}
     double get_bullet_spd() const{return bullet_spd;} //子弹速度
     int get_power() const{return power;}      //子弹威力
+    int get_damage() const{return damage;}
     //virtual void gettower(vector <Tower *> &ts){}   //搜寻塔，攻击
     //virtual void attack(){}  //子弹移动
 };

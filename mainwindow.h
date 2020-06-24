@@ -55,6 +55,8 @@ private slots:
     void on_pushButton_clicked();
 
 
+    void on_label_windowIconTextChanged(const QString &iconText);
+
 private:
     Ui::MainWindow *ui;
     static const int WINDOW_W=900;  //界面宽
@@ -79,7 +81,9 @@ private:
     vector <Tower *> tw;
     vector <EBullet *>ebs;   //敌人的子弹避免互相引用，直接放主界面
     int score=0;    //分数
-    QString s_score;  //分数文字
+    QString s_score, s_wave, s_hp;  //分数文字、波数、血量
+    int allhp;
+    int hp;
     int m2p=0;   //鼠标和画图连接的信号-------1是右键塔选项触发，2是选择塔种类触发
     int show_keng=0;   //标识能否画坑
     int tw_i;  //塔的索引记录

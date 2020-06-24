@@ -21,6 +21,7 @@ protected:
     QImage pic_b;
     Tower* e;                   //记录锁定的塔
     int type_id;     //子弹种类id
+
 public:
     EBullet(){}
     virtual~EBullet(){cout<<"delete ebullet"<<endl;}

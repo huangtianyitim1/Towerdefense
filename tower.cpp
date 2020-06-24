@@ -26,6 +26,8 @@ void Tower::show(QPainter &p){
     for (int i=0; i<bs.size(); i++){
         bs[i]->show(p);
     }
+    QFont font("Microsoft YaHei", 9, 75);
+    p.setFont(font);
     QString s_level="Level:"+QString::number(level);
     p.drawText(x+10, y-25,200,50,1, s_level);
     p.setPen(QPen(1));
@@ -58,6 +60,7 @@ void Tower::getenemy(vector<Enemy *> &es){
 }
 
 void Tower::attack(){
+    if (bs.size()>0){
     for(int i=0; i<bs.size(); i++){         //每颗子弹都移动, 自己的方向已经设置好了
         bs[i]->move();
         if (bs[i]->shootdown()){
@@ -68,7 +71,7 @@ void Tower::attack(){
             delete bs[i];                      //删除子弹对象占有的内存
             bs.erase(bs.begin()+i);          //到界外了，删除
         }
-    }
+    }}
 }
 
 void Tower::levelup(){
