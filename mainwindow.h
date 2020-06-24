@@ -14,6 +14,7 @@
 #include"enemy_s.h"
 #include"tower_s.h"
 #include"enemy_bullet.h"
+#include<QTimer>
 
 using namespace std;
 
@@ -30,10 +31,13 @@ public:
     ~MainWindow();
     void initgame();
     void draw(QPainter &p);
-    Enemy* gen_enemy();    //返回一个指向某一子类敌人的基类指针
+    Enemy* gen_enemy(int i);    //返回一个指向某一子类敌人的基类指针
     int no_tower(int x, int y);   //判断这里 是否有塔，没有返回-999，有的话返回当前鼠标塔的索引
     void gettower(vector<Tower *> es);     //逻辑：给敌人的子弹设置好起点终点
     void ebattack();    //敌人子弹进攻
+    void gen_type();   //产生一批敌人的种类id
+    void load_current_wave();   //加载当前这一波的处理
+    void load_next_wave();    //加载下一波的预--处理，更新波数和音效
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -48,6 +52,8 @@ protected:
 
 private slots:
     void recieve_start();
+    void on_pushButton_clicked();
+
 
 private:
     Ui::MainWindow *ui;
@@ -66,6 +72,8 @@ private:
     static int e_spd4;  //子弹移动刷新频率
     int timerid5;  //敌人子弹刷新移动id
     static int e_spd5;  //敌人子弹移动刷新频率
+    int timerid6;  //每波间隔id
+    static int e_spd6;    //每波间隔时间
     map1 m1;
     QTime time;
     vector <Tower *> tw;
@@ -79,6 +87,11 @@ private:
     QImage keng_pic;    //临时画坑
     int local_x, local_y;  //针对=拖动用的鼠标位置
     int type_id; //塔的种类
+    bool is_on=true;    //正在进行
+    int wave=1;    //敌人波数，初始化为第1波
+    bool is_next_load=false;   //是否加载下一波
+    vector <int> load_type;    //每一波敌人的种类
+    int load_current_index=0; //加载的这一波的第几个敌人
 };
 
 #endif // MAINWINDOW_H

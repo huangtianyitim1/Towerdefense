@@ -10,6 +10,7 @@ int MainWindow::e_spd2=2000;    //敌人产生的频率
 int MainWindow::e_spd3=300;     //塔子弹产生频率
 int MainWindow::e_spd4=5;        //塔子弹移动刷新频率
 int MainWindow::e_spd5=1200;   //敌人子弹产生频率
+int MainWindow::e_spd6=5000;  //每波间隔时间
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -24,11 +25,31 @@ void MainWindow::recieve_start(){
     this->show();
 }
 
-Enemy* MainWindow::gen_enemy(){
-    Enemy* p;
+void MainWindow::gen_type(){           //产生一串敌人种类的序列
     QTime time = QTime::currentTime();     //随机数
     qsrand((uint) time.msec());
-    int i = qrand() % 6+1;
+    for (int i=0; i<6; i++){
+        int t=qrand()%6+1;
+        load_type.push_back(t);
+    }
+}
+
+void MainWindow::load_current_wave(){
+        if(is_next_load==false){   //如果当前的没有加载完，加载当前的
+        e1.push_back(gen_enemy(load_type[load_current_index]));
+        e1.back()->set(start_x, start_y);
+        load_current_index++;
+        if (load_current_index==load_type.size())
+        {is_next_load=true;     //如果这一波加载满了，准备--加载下一波
+            load_current_index=0;  //索引归0
+            load_type.clear();}   //加载的种类 数组清空
+        }
+    }
+
+
+
+Enemy* MainWindow::gen_enemy(int i){
+    Enemy* p;
     switch (i) {
     case 1:   //A
         p=new Enemy1();
@@ -52,12 +73,26 @@ Enemy* MainWindow::gen_enemy(){
         return p;
 }
 
+
+
+void MainWindow::load_next_wave(){
+    if (is_next_load==true &&e1.size()==0){
+    gen_type();
+    e1.clear();
+    wave++;
+    cout<<wave<<endl;
+    //cout<<"next"<<endl;
+    is_next_load=false;
+    }
+}
+
 void MainWindow::initgame(){
     timerid1=startTimer(e_spd);    //刷新敌人移动
     timerid2=startTimer(e_spd2);   //刷新敌人数量
     timerid3=startTimer(e_spd3);  //子弹产生
     timerid4=startTimer(e_spd4);  //子弹移动
     timerid5=startTimer(e_spd5);  //敌人子弹产生
+    timerid6=startTimer(e_spd6);  //每波间隔
     //tw.push_back(Tower());     一开始的一个塔
     //tw[0].set(400,320);
     //加载好地图、选项图标
@@ -70,8 +105,9 @@ void MainWindow::initgame(){
     type3_pic.load(":/images/jienigui.png");
     type4_pic.load(":/images/leixilamu.png");
     keng_pic.load(":/images/keng.png");
-    e1.push_back(gen_enemy());
+    e1.push_back(gen_enemy(1));
     e1[0]->set(start_x,start_y);//初始位置
+    gen_type();   //产生一批敌人的种类id
 }
 
 MainWindow::~MainWindow()
@@ -106,8 +142,10 @@ void MainWindow::paintEvent(QPaintEvent *){
 void MainWindow::draw(QPainter &p){
     s_score="Score: "+QString::number(score);
     p.drawText(500, 100,200,50,1, s_score);
+    if (e1.size()>0){
     for (int i=0; i<e1.size(); i++){
         e1[i]->show(p);
+    }
     }
     for (int i=0; i<tw.size(); i++){
     tw[i]->show(p);}
@@ -138,6 +176,7 @@ void MainWindow::draw(QPainter &p){
 
 void MainWindow::timerEvent(QTimerEvent *e){
     int id = e->timerId();
+    if (is_on){
     if (id==timerid1){
         for (int i=0; i<e1.size(); i++){
             //e1[i].setspd(1);
@@ -158,14 +197,9 @@ void MainWindow::timerEvent(QTimerEvent *e){
         }
     }
     if(id==timerid2){
-        if (e1.size()<7){
-        e1.push_back(gen_enemy());
-        e1.back()->set(start_x,start_y);
-       /* time= QTime::currentTime();
-        qsrand(time.msec()+time.second()*1000);
-        int n = qrand() % 5;
-        timerid2=startTimer(1000*n);*/
-    }
+    load_current_wave();}
+    if (id==timerid6){
+        load_next_wave();
     }
     if(id==timerid3){
         for(int i=0; i<tw.size(); i++){
@@ -182,6 +216,7 @@ void MainWindow::timerEvent(QTimerEvent *e){
         gettower(tw);
     }
     repaint();  //和上面的结合起来看，每一定时间刷新调用一次paintevent函数
+}
 }
 
 
@@ -236,15 +271,8 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
     if (y>100) {   //在工具栏下面才能操作
     if (event->button()==Qt::LeftButton){                                     //左键添加，有喷火龙则不加
         if (m2p==0)      //等于0可以建塔，否则在某一个塔的选项模式
-        {/*
-            if (no_tower(mx, my)<0){    //小于零说明没塔
-            Tower * twp=new Tower();
-            tw.push_back(twp);   //这里压入twp其实是做了一个拷贝
-            double fx=static_cast<double>(mx);
-            double fy=static_cast<double>(my);
-            tw.back()->set(fx, fy);} */
-        }
-        if(m2p==1){
+        {}
+        if(m2p==1){   //塔选项模式
             if (x<tw[tw_i]->getx()-10
                     && x>tw[tw_i]->getx()-60
                     && y<tw[tw_i]->gety()+60
@@ -279,7 +307,6 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
 }
 }
 
-
 void MainWindow::mouseMoveEvent(QMouseEvent *event){
     if (m2p==2){
         local_x=event->x()-40;     //实际位置为鼠标位置的左上角40单位！！！------------------------
@@ -308,16 +335,23 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event){
     }
 }
 
-void MainWindow::mouseDoubleClickEvent(QMouseEvent *event){    //双击实现升级：威力变大
-    //int x=event->x();
-    //int y=event->y();
-    //int mx=x-x%100;
-    //int my=y-y%100;
-    //if (no_tower(mx,my)>=0){ int i=no_tower(mx,my); tw[i].levelup();
+void MainWindow::mouseDoubleClickEvent(QMouseEvent *event){    //双击也可以删除，不建议用
+  /*  int mx=event->x();
+    int my=event->y();
+    mx=mx-mx%100;   //mx和my都已经经过了取100整处理
+    my=my-my%100+20;  //-----------------------------------mx和my都是经过取整百处理，用来判断==，其中my+20了
+    int i=no_tower(mx,my);      //定位到塔的索引（如果有塔）
+    if (i>=0) {
+        delete tw[i];     //释放指向的塔对象
+        tw.erase(tw.begin()+i);
+        m2p=0;    //防止选项出现后又删除
+}*/
 }
 
 
+
 void MainWindow::gettower(vector <Tower*> es){       //敌人的进攻在主界面实现
+    if (es.size()>0 && e1.size()>0){
     for (int i=0; i<e1.size(); i++){
         if (e1[i]->get_id()==4){
             int x=e1[i]->getx();
@@ -343,6 +377,7 @@ void MainWindow::gettower(vector <Tower*> es){       //敌人的进攻在主界面实现
                 }
         }
     }
+    }
 }
 
 void MainWindow::ebattack(){
@@ -359,3 +394,9 @@ void MainWindow::ebattack(){
     }
 }
 
+
+void MainWindow::on_pushButton_clicked()      //暂停游戏
+{
+    if (is_on)  is_on=false;
+    else is_on=true;
+}
