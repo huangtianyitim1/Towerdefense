@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     this->resize(WINDOW_W,WINDOW_H);   //设置界面大小
     initgame();
+    setAttribute(Qt::WA_DeleteOnClose);    //子窗口关闭则停止运行
 }
 
 void MainWindow::recieve_start(){
@@ -83,12 +84,14 @@ void MainWindow::load_next_wave(){
     cout<<wave<<endl;
     //cout<<"next"<<endl;
     is_next_load=false;
+    have_rested=false;   //加载下一波的时候，并不是在休息后
     }
 }
 
 void MainWindow::initgame(){
     allhp=1000;
     hp=allhp;
+    score=1000;
     timerid1=startTimer(e_spd);    //刷新敌人移动
     timerid2=startTimer(e_spd2);   //刷新敌人数量
     timerid3=startTimer(e_spd3);  //子弹产生
@@ -179,13 +182,13 @@ void MainWindow::draw(QPainter &p){
         if (type_id==2) {p.drawImage(size, type2_pic); p.drawEllipse(QPoint(local_x+40, local_y+40), 180, 180);}  //  2号塔迷你龙射程180
         if (type_id==3) {p.drawImage(size, type3_pic); p.drawEllipse(QPoint(local_x+40, local_y+40), 200, 200);}  //  3号塔杰尼龟射程200
         if (type_id==4) {p.drawImage(size, type4_pic); p.drawEllipse(QPoint(local_x+40, local_y+40), 250, 250);}  //  4号塔雷希拉姆射程250
-
     }
 
     for (int i=0; i<ebs.size(); i++){
     ebs[i]->show(p);      //敌人的子弹单独画
     }
 }
+
 
 void MainWindow::timerEvent(QTimerEvent *e){
     int id = e->timerId();
@@ -199,41 +202,50 @@ void MainWindow::timerEvent(QTimerEvent *e){
             if(e1[i]->die()){
                 score+=e1[i]->get_score();
                 delete e1[i];    //释放指向的敌人对象内存---------------一个问题：没法避免释放两次
+                e1[i]=NULL;
                 e1.erase(e1.begin()+i);   //删除数组的指针元素
             }
             else if(m1.outbound(e1[i]) ){     //进入家园，家掉血
                 hp-=e1[i]->get_damage();
                 delete e1[i];    //释放指向的敌人对象内存------------
+                e1[i]=NULL;
                 e1.erase(e1.begin()+i);   //删除数组的指针元素
             }
         }
         for (int i=0; i<tw.size();i++){    //检测 塔是否阵亡
             if (tw[i]->get_hp()<=0){
                 delete tw[i];
+                tw[i]=NULL;
                 tw.erase(tw.begin()+i);
             }
         }
     }
     if(id==timerid2){
-    load_current_wave();}
+        if (wave==2 && have_rested==false){emit rest(); is_on=false; }
+    load_current_wave();
+    repaint(); }
     if (id==timerid6){
         load_next_wave();
+        repaint();
     }
     if(id==timerid3){
         for(int i=0; i<tw.size(); i++){
         tw[i]->getenemy(e1);
         tw[i]->attack();
+        repaint();
         }
     }
     if(id==timerid4){
         for(int i=0; i<tw.size(); i++){
         tw[i]->attack();}
         ebattack();
+        repaint();
     }
     if(id==timerid5){
         gettower(tw);
+        repaint();
     }
-    repaint();  //和上面的结合起来看，每一定时间刷新调用一次paintevent函数
+
 }
 }
 
@@ -286,7 +298,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
     repaint();
     }
 
-    if (y>100) {   //在工具栏下面才能操作
+    if (y>100 || m2p==1) {   //在工具栏下面才能操作
     if (event->button()==Qt::LeftButton){                                     //左键添加，有喷火龙则不加
         if (m2p==0)      //等于0可以建塔，否则在某一个塔的选项模式
         {}
@@ -296,16 +308,19 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
                     && y<tw[tw_i]->gety()+60
                     && y>tw[tw_i]->gety()+10){   //删除选项的位置判断，注意指针记得释放指向对象的内存
                 delete tw[tw_i];  //虽然tw[tw_i]是对应的原来的twp的拷贝，但是delete同样也起到了释放指向塔对象内存的作用
+                tw[tw_i]=NULL;
                 tw.erase(tw.begin()+tw_i);
+                score+=200;    //铲除的补偿
                 m2p=0;  //非常重要！！！这里如果不化为0，则会重复删除导致内存泄漏
             }
-            if (x<tw[tw_i]->getx()+60
+            else if (x<tw[tw_i]->getx()+60
                     && x>tw[tw_i]->getx()+10
                     && y<tw[tw_i]->gety()-10
                     && y>tw[tw_i]->gety()-60){
-                tw[tw_i]->levelup();
+                if (score>=tw[tw_i]->get_level_score()){    //分数足够才能进化
+                score-=tw[tw_i]->levelup();}   //扣除进化的分数
             }
-            if(x<tw[tw_i]->getx()+150
+            else if(x<tw[tw_i]->getx()+150
                     && x>tw[tw_i]->getx()+100
                     && y<tw[tw_i]->gety()+60
                     && y>tw[tw_i]->gety()+10){
@@ -336,20 +351,26 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
 
 void MainWindow::mouseReleaseEvent(QMouseEvent *event){
     if(m2p==2){
-    m2p=0;
+
     int mx=event->x()-event->x()%100;
     int my=event->y()-event->y()%100+20;   //100取整下来一点
     if (no_tower(mx,my)<0){
     Tower * twp;
-    if (type_id==1) twp=new Tower();
-    if (type_id==2) twp=new Tower2();
-    if (type_id==3) twp=new Tower3();
-    if (type_id==4) twp=new Tower4();
-    tw.push_back(twp);   //这里压入twp其实是做了一个拷贝
     double fx=static_cast<double>(mx);
     double fy=static_cast<double>(my);
-    tw.back()->set(fx, fy);
+    if (type_id==1) {twp=new Tower(); twp->set(fx, fy);}
+    if (type_id==2) {twp=new Tower2(); twp->set(fx, fy);}
+    if (type_id==3) {twp=new Tower3(); twp->set(fx, fy);}
+    if (type_id==4) {twp=new Tower4(); twp->set(fx, fy);}
+    if (score>=twp->get_make_score()){        //分数足够则可以进行种塔
+    tw.push_back(twp);   //这里压入twp其实是做了一个拷贝
+    score-=twp->get_make_score();}    //消耗分数
+    else if (score<twp->get_make_score()){     //分数不够，删除
+        delete twp;
+        twp=NULL;
     }
+    }
+    m2p=0;
     }
 }
 
@@ -403,10 +424,12 @@ void MainWindow::ebattack(){
         ebs[i]->move();
         if (ebs[i]->shootdown()){
             delete ebs[i];         //删除子弹对象占有的内存
+            ebs[i]=NULL;
             ebs.erase(ebs.begin()+i);                  //打中扣血，子弹消失
         }
         else if (ebs[i]->getx()>960 || ebs[i]->gety()>540 || ebs[i]->getx()<0 || ebs[i]->gety()<0){
             delete ebs[i];                      //删除子弹对象占有的内存
+            ebs[i]=NULL;
             ebs.erase(ebs.begin()+i);          //到界外了，删除
         }
     }
@@ -419,7 +442,4 @@ void MainWindow::on_pushButton_clicked()      //暂停游戏
     else is_on=true;
 }
 
-void MainWindow::on_label_windowIconTextChanged(const QString &iconText)
-{
 
-}

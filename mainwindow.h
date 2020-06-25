@@ -38,6 +38,8 @@ public:
     void gen_type();   //产生一批敌人的种类id
     void load_current_wave();   //加载当前这一波的处理
     void load_next_wave();    //加载下一波的预--处理，更新波数和音效
+    bool is_on=true;    //正在进行
+    bool have_rested=false;   //已经休息过了的标识
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -54,8 +56,8 @@ private slots:
     void recieve_start();
     void on_pushButton_clicked();
 
-
-    void on_label_windowIconTextChanged(const QString &iconText);
+signals:
+    void rest();
 
 private:
     Ui::MainWindow *ui;
@@ -80,7 +82,7 @@ private:
     QTime time;
     vector <Tower *> tw;
     vector <EBullet *>ebs;   //敌人的子弹避免互相引用，直接放主界面
-    int score=0;    //分数
+    int score;    //分数
     QString s_score, s_wave, s_hp;  //分数文字、波数、血量
     int allhp;
     int hp;
@@ -91,7 +93,6 @@ private:
     QImage keng_pic;    //临时画坑
     int local_x, local_y;  //针对=拖动用的鼠标位置
     int type_id; //塔的种类
-    bool is_on=true;    //正在进行
     int wave=1;    //敌人波数，初始化为第1波
     bool is_next_load=false;   //是否加载下一波
     vector <int> load_type;    //每一波敌人的种类

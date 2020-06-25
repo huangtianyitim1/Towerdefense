@@ -8,11 +8,13 @@ void Tower::set(double x, double y){
     this->y=y;
     range=200;  //范围
     spd=5; //子弹射速，可以升级，一般不用
-    power=2;  //子弹威力，升级加大
+    power=5;  //子弹威力，升级加大
     picture=":/images/xiaohuolong.png";
     id=0;
     allhp=10;
     hp=allhp;
+    make_score=350;
+    level_score=200;
 }
 
 void Tower::loadimage(const QString&s){
@@ -50,6 +52,7 @@ void Tower::getenemy(vector<Enemy *> &es){
         //cout<<ex<<"------"<<ey<<endl;
         Bullet *bp=new Bullet();
         bs.push_back(bp);
+        bp=NULL;
         bs.back()->set(x+30, y+30, es[ei]);
         bs.back()->setspd(spd);     //初始化子弹的射速
         int tmp_power=power;      //自己的临时威力，面对不同敌人会不同，但本来power只和等级有关
@@ -65,22 +68,25 @@ void Tower::attack(){
         bs[i]->move();
         if (bs[i]->shootdown()){
             delete bs[i];         //删除子弹对象占有的内存
+            bs[i]=NULL;
             bs.erase(bs.begin()+i);                  //打中扣血，子弹消失
         }
         else if (bs[i]->getx()>960 || bs[i]->gety()>600 || bs[i]->getx()<0 || bs[i]->gety()<0){
             delete bs[i];                      //删除子弹对象占有的内存
+            bs[i]=NULL;
             bs.erase(bs.begin()+i);          //到界外了，删除
         }
     }}
 }
 
-void Tower::levelup(){
-    if(level<9){
+int Tower::levelup(){
+    if(level<3){
     level++;
-    power=power+1;          //升级加威力
-    if (level==4) {picture=":/images/huokonglong.png"; power=power+4;}
-    if(level==9) {picture=":/images/penhuolong.png"; power=power+7;}
+    if (level==2) {picture=":/images/huokonglong.png"; power=power+7;}
+    if(level==3) {picture=":/images/penhuolong.png"; power=power+9;}
+    return level_score;
     }
+    else return 0;
 }
 
 void Tower::hp_minus(int p){           //扣的血为子弹威力

@@ -30,6 +30,8 @@ protected:
     int e_in;  //范围内是否有敌人，光圈塔专用
     int hp;  //自己的即时血量
     int allhp; //初始血量
+    int make_score;   //建造消耗的积分
+    int level_score;    //升级消耗的积分
 public:
     Tower(){}
     virtual ~Tower(){}
@@ -43,10 +45,12 @@ public:
     virtual void getenemy(vector<Enemy *> &es);                   //寻找和锁定敌人，添加一颗子弹朝他发射，传递速度
     virtual void attack();                     //所有子弹移动，如果打中了删除
     int getn_bs() const {return bs.size();}                    //the size of bullets
-    virtual void levelup();    //升级
+    virtual int levelup();    //升级，返回消耗的积分
     int getid() const {return id;}
     double get_range() const {return range;}
     void hp_minus(int p);
     int get_hp() const{return hp;}   //小于等于0判定为死亡
+    int get_make_score() const {return make_score;}
+    int get_level_score() const {return level_score;}
 };
 #endif // TOWER_H

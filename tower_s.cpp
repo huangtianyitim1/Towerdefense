@@ -5,21 +5,24 @@ void Tower2::set(double x, double y){
     this->y=y;
     range=180;  //范围
     spd=5; //子弹射速，可以升级，一般不用
-    power=5;  //子弹威力，升级加大
+    power=7;  //子弹威力，升级加大
     picture=":/images/minilong.png";
     id=2;
     allhp=10;
     hp=allhp;
+    make_score=450;
+    level_score=250;
 }
 
 
-void Tower2::levelup(){
-    if(level<12){
+int Tower2::levelup(){
+    if(level<3){
     level++;
-    power=power+1;          //升级加威力
-    if (level==5) {picture=":/images/hakelong.png"; power=power+5;}
-    if(level==12) {picture=":/images/kuailong.png"; power=power+9;}
+    if (level==2) {picture=":/images/hakelong.png"; power=power+9;}
+    if(level==3) {picture=":/images/kuailong.png"; power=power+11;}
+    return level_score;
     }
+    else return 0;
 }
 
 void Tower2::getenemy(vector<Enemy *> &es){
@@ -56,16 +59,19 @@ void Tower3::set(double x, double y){
     id=3;
     allhp=10;
     hp=allhp;
+    make_score=350;
+    level_score=200;
 }
 
 
-void Tower3::levelup(){
-    if(level<9){
+int Tower3::levelup(){
+    if(level<3){
     level++;
-    power=power+1;          //升级加威力
-    if (level==4) {picture=":/images/kamigui.png"; power=power+4;}
-    if(level==9) {picture=":/images/shuijiangui.png"; power=power+7;}
+    if (level==2) {picture=":/images/kamigui.png"; power=power+7;}
+    if(level==3) {picture=":/images/shuijiangui.png"; power=power+9;}
+    return level_score;
     }
+    else return 0;
 }
 
 void Tower3::getenemy(vector<Enemy *> &es){
@@ -103,13 +109,17 @@ void Tower4::set(double x, double y){
     id=4;
     allhp=10;
     hp=allhp;
+    make_score=400;
+    level_score=300;
 }
 
-void Tower4::levelup(){
-    if(level<7){
+int Tower4::levelup(){
+    if(level<3){
     level++;
-    power=power+2;          //升级加威力
+    power=power+12;          //升级加威力
+    return level_score;
     }
+    else return 0;
 }
 
 void Tower4::getenemy(vector<Enemy *> &es){

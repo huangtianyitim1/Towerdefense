@@ -7,6 +7,7 @@ start_window::start_window(QWidget *parent) :
 {
     ui->setupUi(this);
     this->resize(900,600);
+    pre=new Prepare(this);    //中场休息界面的初始化
 }
 
 start_window::~start_window()
@@ -23,8 +24,21 @@ void start_window::paintEvent(QPaintEvent * ){
 
 void start_window::on_pushButton_clicked()
 {
-    MainWindow *w=new MainWindow(this);          //跳转页面
+    w=new MainWindow(this);          //跳转页面
+    connect(w,SIGNAL(rest()),this,SLOT(show_prepare()));
+    connect(pre,SIGNAL(back()),this,SLOT(showmain1()));
     w->show();
-    this->hide();
+    this->minimumSize();
     //emit showmain1();
+}
+
+void start_window::show_prepare(){//回到中场休息界面
+    pre->show();
+}
+
+void start_window::showmain1(){
+    pre->hide();
+    w->show();
+    w->have_rested=true;
+    w->is_on=true;
 }

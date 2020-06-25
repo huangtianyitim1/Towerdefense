@@ -34,7 +34,8 @@ SOURCES += \
     start_window.cpp \
     tower_s.cpp \
     bullet_s.cpp \
-    enemy_bullet.cpp
+    enemy_bullet.cpp \
+    prepare.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -46,11 +47,13 @@ HEADERS += \
     start_window.h \
     tower_s.h \
     bullet_s.h \
-    enemy_bullet.h
+    enemy_bullet.h \
+    prepare.h
 
 FORMS += \
         mainwindow.ui \
-    start_window.ui
+    start_window.ui \
+    prepare.ui
 
 RESOURCES += \
     resource.qrc

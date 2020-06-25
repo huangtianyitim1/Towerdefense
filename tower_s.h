@@ -8,7 +8,7 @@ private:
 public:
     Tower2(){}
     virtual ~Tower2(){}
-    void levelup();
+    int levelup();
     void set(double x, double y);
     void getenemy(vector<Enemy *> &es);
 };
@@ -17,7 +17,7 @@ class Tower3: public Tower{
   public:
     Tower3(){}
     ~Tower3(){}
-    void levelup();
+    int levelup();
     void set(double x, double y);
     void getenemy(vector<Enemy *> &es);
 };
@@ -26,7 +26,7 @@ class Tower4: public Tower{
 public:
     Tower4(){}
     ~Tower4(){cout<<"delete 4"<<endl;}
-    void levelup();
+    int levelup();
     void set(double x, double y);
     void getenemy(vector<Enemy *> &es);
     void attack();
