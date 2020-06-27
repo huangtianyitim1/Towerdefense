@@ -40,6 +40,7 @@ public:
     void load_next_wave();    //加载下一波的预--处理，更新波数和音效
     bool is_on=true;    //正在进行
     bool have_rested=false;   //已经休息过了的标识
+    int * type_checked;   //选中的塔按顺序的id
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -78,7 +79,7 @@ private:
     static int e_spd5;  //敌人子弹移动刷新频率
     int timerid6;  //每波间隔id
     static int e_spd6;    //每波间隔时间
-    map1 m1;
+    const map1 m1;              //地图常对象
     QTime time;
     vector <Tower *> tw;
     vector <EBullet *>ebs;   //敌人的子弹避免互相引用，直接放主界面
@@ -89,7 +90,7 @@ private:
     int m2p=0;   //鼠标和画图连接的信号-------1是右键塔选项触发，2是选择塔种类触发
     int show_keng=0;   //标识能否画坑
     int tw_i;  //塔的索引记录
-    QImage type1_pic, type2_pic, type3_pic, type4_pic;    //塔的种类菜单栏图
+    QImage* type_pic;    //塔的种类菜单栏图数组
     QImage keng_pic;    //临时画坑
     int local_x, local_y;  //针对=拖动用的鼠标位置
     int type_id; //塔的种类
@@ -97,6 +98,7 @@ private:
     bool is_next_load=false;   //是否加载下一波
     vector <int> load_type;    //每一波敌人的种类
     int load_current_index=0; //加载的这一波的第几个敌人
+    int *menu_x;       //菜单栏的间隔
 };
 
 #endif // MAINWINDOW_H

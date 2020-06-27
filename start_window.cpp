@@ -8,6 +8,7 @@ start_window::start_window(QWidget *parent) :
     ui->setupUi(this);
     this->resize(900,600);
     pre=new Prepare(this);    //中场休息界面的初始化
+    is_checked=new int[12]();
 }
 
 start_window::~start_window()
@@ -41,4 +42,18 @@ void start_window::showmain1(){
     w->show();
     w->have_rested=true;
     w->is_on=true;
+    for (int i=0; i<6; i++){
+        w->type_checked[i]=0;   //      主窗口的先全部清零
+    }
+    for (int i=0, j=0;  i<12&&j<6; ){                    //将pre中的01编码变为w中有顺序的种类id
+        if (pre->is_checked[i]==1){
+            w->type_checked[j]=i+1;     //种类id要索引+1
+            i++;
+            j++;
+        }
+        else i++;
+    }
+    for (int i=0; i<12; i++){
+        pre->is_checked[i]=0;    //回去之后，全部归零，回到全都未选状态
+    }
 }

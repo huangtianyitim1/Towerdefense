@@ -37,6 +37,7 @@ private:
     QImage background;
     Prepare *pre;
     MainWindow *w;
+    int * is_checked;
 };
 
 #endif // START_WINDOW_H

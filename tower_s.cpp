@@ -104,7 +104,7 @@ void Tower4::set(double x, double y){
     this->y=y;
     range=5;  //范围
     spd=1; //光圈射速，可以升级，一般不用
-    power=5;  //子弹威力，升级加大
+    power=7;  //子弹威力，升级加大
     picture=":/images/leixilamu.png";
     id=4;
     allhp=10;
@@ -146,8 +146,8 @@ void Tower4::getenemy(vector<Enemy *> &es){
 
 void Tower4::attack(){
     if (e_in==1){
-        if (range<150) range=range+spd;
-        if (range>=150) range=20;
+        if (range<180) range=range+spd;
+        if (range>=180) range=20;
     }
 }
 

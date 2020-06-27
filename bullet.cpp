@@ -10,20 +10,20 @@ void Bullet::set(double x, double y, Enemy *p){
     this->ex=this->e->getx()+20;     //要注意的是子弹定位的地方不一定就是敌人的右上角，要下来一点
     this->ey=this->e->gety()+20;
     double l=sqrt(pow(x-ex,2)+pow(y-ey,2));
-    if (ey-y>0 && ex-x>0){   //1
+    if (ey-y>=0 && ex-x>=0){   //1
         dir=asin((fabs(static_cast<double>(ey-y)))/l);
     }
-    else if(ey-y>0 && ex-x<0){   //2
+    else if(ey-y>=0 && ex-x<=0){   //2
         dir=-1*asin((fabs(static_cast<double>(ey-y)))/l)+3.1415926;
     }
-    else if(ey-y<0 && ex-x<0){  //3
+    else if(ey-y<=0 && ex-x<=0){  //3
         dir=asin((fabs(static_cast<double>(ey-y)))/l)+3.1415926;
     }
-    else if(ey-y<0 && ex-x>0){   //
+    else if(ey-y<=0 && ex-x>=0){   //
         dir=-1*asin((fabs(static_cast<double>(ey-y)))/l)+3.1415926*2;
     }
       //注意这里用atan则不能得到360！
-    type_id=0;   //种类id为0
+    type_id=1;   //种类id为0
 }
 
 void Bullet::setspd(double s){

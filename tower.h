@@ -34,6 +34,12 @@ protected:
     int level_score;    //升级消耗的积分
 public:
     Tower(){}
+    Tower(int range, int spd, int power, int allhp, int make_score, int level_score): range(range),spd(spd),power(power),
+    allhp(allhp),make_score(make_score), level_score(level_score){
+        picture=":/images/minilong.png";
+        id=1;
+        hp=this->allhp;
+    }
     virtual ~Tower(){}
     const static int w,h;    //图片大小
     virtual void set(double x, double y);   //位置和

@@ -10,7 +10,7 @@ void Tower::set(double x, double y){
     spd=5; //子弹射速，可以升级，一般不用
     power=5;  //子弹威力，升级加大
     picture=":/images/xiaohuolong.png";
-    id=0;
+    id=1;
     allhp=10;
     hp=allhp;
     make_score=350;

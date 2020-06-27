@@ -4,10 +4,11 @@
 //class Enemy;
 class map1{
 private:
-    double x,y;
+
 public:
     map1(){}
-    void collide_check(Enemy *e);
-    bool outbound(Enemy *);
+    void collide_check(Enemy *e) const;
+    bool outbound(Enemy *) const;
+    bool can_put(double x, double y) const;    //判断能不能放，必须传入整百
 };
 #endif // MAP1_H

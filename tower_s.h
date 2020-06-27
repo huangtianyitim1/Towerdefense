@@ -7,6 +7,11 @@ private:
 
 public:
     Tower2(){}
+    Tower2(int range, int spd, int power, int allhp, int make_score, int level_score): Tower(range, spd, power, allhp, make_score, level_score){
+        picture=":/images/minilong.png";
+        id=2;
+        hp=this->allhp;
+    }
     virtual ~Tower2(){}
     int levelup();
     void set(double x, double y);
@@ -16,6 +21,11 @@ public:
 class Tower3: public Tower{
   public:
     Tower3(){}
+    Tower3(int range, int spd, int power, int allhp, int make_score, int level_score): Tower(range, spd, power, allhp, make_score, level_score){
+        picture=":/images/jienigui.png";
+        id=3;
+        hp=this->allhp;
+    }
     ~Tower3(){}
     int levelup();
     void set(double x, double y);
@@ -25,7 +35,12 @@ class Tower3: public Tower{
 class Tower4: public Tower{
 public:
     Tower4(){}
-    ~Tower4(){cout<<"delete 4"<<endl;}
+    Tower4(int range, int spd, int power, int allhp, int make_score, int level_score): Tower(range, spd, power, allhp, make_score, level_score){
+        picture=":/images/leixilamu.png";
+        id=4;
+        hp=this->allhp;
+    }
+    ~Tower4(){}
     int levelup();
     void set(double x, double y);
     void getenemy(vector<Enemy *> &es);

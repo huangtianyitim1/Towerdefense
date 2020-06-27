@@ -30,7 +30,7 @@ void MainWindow::gen_type(){           //产生一串敌人种类的序列
     QTime time = QTime::currentTime();     //随机数
     qsrand((uint) time.msec());
     for (int i=0; i<6; i++){
-        int t=qrand()%6+1;
+        int t=qrand()%6+1;    //记得加1，是id而不是索引
         load_type.push_back(t);
     }
 }
@@ -46,7 +46,6 @@ void MainWindow::load_current_wave(){
             load_type.clear();}   //加载的种类 数组清空
         }
     }
-
 
 
 Enemy* MainWindow::gen_enemy(int i){
@@ -75,7 +74,6 @@ Enemy* MainWindow::gen_enemy(int i){
 }
 
 
-
 void MainWindow::load_next_wave(){
     if (is_next_load==true &&e1.size()==0){
     gen_type();
@@ -87,6 +85,7 @@ void MainWindow::load_next_wave(){
     have_rested=false;   //加载下一波的时候，并不是在休息后
     }
 }
+
 
 void MainWindow::initgame(){
     allhp=1000;
@@ -100,15 +99,18 @@ void MainWindow::initgame(){
     timerid6=startTimer(e_spd6);  //每波间隔
     //tw.push_back(Tower());     一开始的一个塔
     //tw[0].set(400,320);
+    type_checked=new int[6]{1,2,3,0,0,0};     //初始化只有id=1,2,3              ---------------------------------记得delete
+    type_pic=new QImage[12];
+    menu_x=new int[6]{110,210,310,410,510,610};  //菜单栏间距           ------------------------记得delete
     //加载好地图、选项图标
     map.load(":/images/map1.png");
     remove.load(":/images/chanzi.png");
     up.load(":/images/shengji.png");
     cancel.load(":/images/quxiao.png");
-    type1_pic.load(":/images/xiaohuolong.png");
-    type2_pic.load(":/images/minilong.png");
-    type3_pic.load(":/images/jienigui.png");
-    type4_pic.load(":/images/leixilamu.png");
+    type_pic[0].load(":/images/xiaohuolong.png");
+    type_pic[1].load(":/images/minilong.png");
+    type_pic[2].load(":/images/jienigui.png");
+    type_pic[3].load(":/images/leixilamu.png");
     keng_pic.load(":/images/keng.png");
     e1.push_back(gen_enemy(1));
     e1[0]->set(start_x,start_y);//初始位置
@@ -132,14 +134,21 @@ void MainWindow::paintEvent(QPaintEvent *){
     //dot.load(":/images/apple.png");
     //p.drawImage(target, dot);
     p.drawImage(background, map);    //画背景
-    QRect type1(110,10,70,70);
-    p.drawImage(type1, type1_pic);   //画可选塔1：小火龙
-    QRect type2(210,10,70,70);
-    p.drawImage(type2, type2_pic);   //画可选塔2：迷你龙
-    QRect type3(310,10,70,70);
-    p.drawImage(type3, type3_pic);   //画可选塔3：杰尼龟
-    QRect type4(410,10,70,70);
-    p.drawImage(type4, type4_pic);//画可选塔4：雷希拉姆
+    //QRect type1(110,10,70,70);
+    //QRect type2(210,10,70,70);
+    //QRect type3(310,10,70,70);
+    //QRect type4(410,10,70,70);
+    for (int i=0; i<6;i++){
+        if (type_checked[i]!=0){
+            int tmp=type_checked[i];
+            QRect type_i(menu_x[i],10,70,70);
+            p.drawImage(type_i, type_pic[tmp-1]);  //记得-1，索引是从0开始的
+        }
+    }
+    //p.drawImage(type1, type1_pic);   //画可选塔1：小火龙
+    //p.drawImage(type2, type2_pic);   //画可选塔2：迷你龙
+    //p.drawImage(type3, type3_pic);   //画可选塔3：杰尼龟
+    //p.drawImage(type4, type4_pic);//画可选塔4：雷希拉姆
     //画对象
     draw(p);
 }
@@ -178,10 +187,10 @@ void MainWindow::draw(QPainter &p){
         QRect size(local_x,local_y,80,80);
         p.setBrush(Qt::NoBrush);
         if (show_keng==1) {QRect keng_size(local_x+40-(local_x+40)%100,local_y+40-(local_y+40)%100,100,100); p.drawImage(keng_size, keng_pic); }
-        if (type_id==1) {p.drawImage(size, type1_pic); p.drawEllipse(QPoint(local_x+40, local_y+40), 200, 200);}   //小火龙射程200
-        if (type_id==2) {p.drawImage(size, type2_pic); p.drawEllipse(QPoint(local_x+40, local_y+40), 180, 180);}  //  2号塔迷你龙射程180
-        if (type_id==3) {p.drawImage(size, type3_pic); p.drawEllipse(QPoint(local_x+40, local_y+40), 200, 200);}  //  3号塔杰尼龟射程200
-        if (type_id==4) {p.drawImage(size, type4_pic); p.drawEllipse(QPoint(local_x+40, local_y+40), 250, 250);}  //  4号塔雷希拉姆射程250
+        if (type_id==1) {p.drawImage(size, type_pic[0]); p.drawEllipse(QPoint(local_x+40, local_y+40), 200, 200);}   //小火龙射程200
+        if (type_id==2) {p.drawImage(size, type_pic[1]); p.drawEllipse(QPoint(local_x+40, local_y+40), 180, 180);}  //  2号塔迷你龙射程180
+        if (type_id==3) {p.drawImage(size, type_pic[2]); p.drawEllipse(QPoint(local_x+40, local_y+40), 200, 200);}  //  3号塔杰尼龟射程200
+        if (type_id==4) {p.drawImage(size, type_pic[3]); p.drawEllipse(QPoint(local_x+40, local_y+40), 250, 250);}  //  4号塔雷希拉姆射程250
     }
 
     for (int i=0; i<ebs.size(); i++){
@@ -222,7 +231,7 @@ void MainWindow::timerEvent(QTimerEvent *e){
     }
     if(id==timerid2){
         if (wave==2 && have_rested==false){emit rest(); is_on=false; }
-    load_current_wave();
+        else load_current_wave();
     repaint(); }
     if (id==timerid6){
         load_next_wave();
@@ -272,28 +281,36 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
 
     if (y<=100){    ///////////////工具栏，选择塔类型
     if(x<160 &&x>100){
+        if (type_checked[0]>0){
       local_x=x;
       local_y=y;
       m2p=2;    //拖动的信号
-      type_id=1; //小火龙id
+      int tmp=type_checked[0];
+      type_id=tmp; }//(小火龙id)第一个选的塔的id
     }
     if(x<260 &&x>200){
+        if (type_checked[1]>0){
       local_x=x;
       local_y=y;
       m2p=2;    //拖动的信号
-      type_id=2; //迷你龙id
+      int tmp=type_checked[1];
+      type_id=tmp; }     //(迷你龙id)第二个选的塔id
     }
     if(x<360 &&x>300){
+        if (type_checked[2]>0){
       local_x=x;
       local_y=y;
       m2p=2;    //拖动的信号
-      type_id=3; //杰尼龟id
+      int tmp=type_checked[2];
+      type_id=tmp; } //杰尼龟id
     }
     if(x<460 &&x>400){
+        if (type_checked[3]>0){
       local_x=x;
       local_y=y;
       m2p=2;    //拖动的信号
-      type_id=4; //雷希拉姆id
+      int tmp=type_checked[3];
+      type_id=tmp; } //雷希拉姆id
     }
     repaint();
     }
@@ -362,10 +379,10 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event){
     if (type_id==2) {twp=new Tower2(); twp->set(fx, fy);}
     if (type_id==3) {twp=new Tower3(); twp->set(fx, fy);}
     if (type_id==4) {twp=new Tower4(); twp->set(fx, fy);}
-    if (score>=twp->get_make_score()){        //分数足够则可以进行种塔
+    if (score>=twp->get_make_score()  && m1.can_put(mx,my-20)){        //分数足够则可以进行种塔且这个位置能种
     tw.push_back(twp);   //这里压入twp其实是做了一个拷贝
     score-=twp->get_make_score();}    //消耗分数
-    else if (score<twp->get_make_score()){     //分数不够，删除
+    else {     //分数不够，或者没法放，删除
         delete twp;
         twp=NULL;
     }
