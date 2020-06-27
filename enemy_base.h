@@ -52,6 +52,8 @@ public:
     int get_power() const{return power;}      //子弹威力
     int get_damage() const{return damage;}
     void wave_enhance(int wave);   //每一波后的强化
+    bool has_scored=false;    //死了有没有算积分
+    bool has_hurt_hp=false;   //有没有已经扣了我的血
     //virtual void gettower(vector <Tower *> &ts){}   //搜寻塔，攻击
     //virtual void attack(){}  //子弹移动
 };

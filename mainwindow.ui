@@ -38,6 +38,19 @@ font: 75 9pt &quot;思源黑体 CN Bold&quot;;</string>
      <string>暂停/继续</string>
     </property>
    </widget>
+   <widget class="QLabel" name="boomlabel">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>170</y>
+      <width>41</width>
+      <height>9</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

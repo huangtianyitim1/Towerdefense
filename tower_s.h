@@ -48,4 +48,19 @@ public:
     void show(QPainter &p);
 };
 
+class Tower5: public Tower{
+public:
+    Tower5(){}
+    Tower5(int range, int spd, int power, int allhp, int make_score, int level_score): Tower(range, spd, power, allhp, make_score, level_score){
+        picture=":/images/wanpidan.png";
+        id=5;
+        hp=this->allhp;
+    }
+    ~Tower5(){}
+    int levelup();
+    void set(double x, double y);
+    void getenemy(vector<Enemy *> &es);
+    void attack();
+};
+
 #endif // TOWER_S_H

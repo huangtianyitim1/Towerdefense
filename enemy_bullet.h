@@ -24,7 +24,7 @@ protected:
 
 public:
     EBullet(){}
-    virtual~EBullet(){cout<<"delete ebullet"<<endl;}
+    virtual~EBullet(){}
     virtual void set(double x, double y, Tower *p);  //位置  和锁定的敌人
     double getdir() const {return dir;}             //返回方向
     void setspd(double s);                      //设置速度

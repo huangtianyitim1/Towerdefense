@@ -22,16 +22,52 @@ MainWindow::MainWindow(QWidget *parent) :
     setAttribute(Qt::WA_DeleteOnClose);    //×Ó´°¿Ú¹Ø±ÕÔòÍ£Ö¹ÔËĞĞ
 }
 
+void MainWindow::initgame(){
+    allhp=1000;
+    hp=allhp;
+    score=100000;   //------------------------------------------------------------------
+    timerid1=startTimer(e_spd);    //Ë¢ĞÂµĞÈËÒÆ¶¯
+    timerid2=startTimer(e_spd2);   //Ë¢ĞÂµĞÈËÊıÁ¿
+    timerid3=startTimer(e_spd3);  //×Óµ¯²úÉú
+    timerid4=startTimer(e_spd4);  //×Óµ¯ÒÆ¶¯
+    timerid5=startTimer(e_spd5);  //µĞÈË×Óµ¯²úÉú
+    timerid6=startTimer(e_spd6);  //Ã¿²¨¼ä¸ô
+    //tw.push_back(Tower());     Ò»¿ªÊ¼µÄÒ»¸öËş
+    //tw[0].set(400,320);
+    type_checked=new int[6]{1,3,0,0,0,0};     //³õÊ¼»¯Ö»ÓĞid=1,3              ---------------------------------¼ÇµÃdelete
+    type_pic=new QImage[12];
+    menu_x=new int[6]{110,210,310,410,510,610};  //²Ëµ¥À¸¼ä¾à           ------------------------¼ÇµÃdelete
+    boomtimer=new QTimer(this);
+    //¼ÓÔØºÃµØÍ¼¡¢Ñ¡ÏîÍ¼±ê
+    map.load(":/images/map1.png");
+    remove.load(":/images/chanzi.png");
+    up.load(":/images/shengji.png");
+    cancel.load(":/images/quxiao.png");
+    type_pic[0].load(":/images/xiaohuolong.png");
+    type_pic[1].load(":/images/minilong.png");
+    type_pic[2].load(":/images/jienigui.png");
+    type_pic[3].load(":/images/leixilamu.png");
+    type_pic[4].load(":/images/wanpidan.png");
+    keng_pic.load(":/images/keng.png");
+    //e1.push_back(gen_enemy(1));
+    //e1[0]->set(start_x,start_y);//³õÊ¼Î»ÖÃ
+    gen_type();   //²úÉúÒ»ÅúµĞÈËµÄÖÖÀàid
+    ui->boomlabel->setVisible(false);
+    connect(this, SIGNAL(boom()), this, SLOT(setboom()));
+    connect(this->boomtimer, SIGNAL(timeout()), this, SLOT(boomdone()));
+}
+
 void MainWindow::recieve_start(){
     this->show();
 }
 
 void MainWindow::gen_type(){           //²úÉúÒ»´®µĞÈËÖÖÀàµÄĞòÁĞ
-    QTime time = QTime::currentTime();     //Ëæ»úÊı
+    time = QTime::currentTime();     //Ëæ»úÊı
     qsrand((uint) time.msec());
     if(wave<Waveinfo::wave5-1)  //--------------------------------ÕâÀïwave5Òª»»Í¼ÁË
+        cout<<Waveinfo::wave4-1<<endl;
     for (int i=0; i<Waveinfo::num_phase1; i++){
-        int t=qrand()%Waveinfo::wavetype(wave)+1;    //¼ÇµÃ¼Ó1£¬ÊÇid¶ø²»ÊÇË÷Òı
+        int t=qrand()%Waveinfo::wavetype(wave)+1;    //¼ÇµÃ¼Ó1£¬ÊÇid¶ø²»ÊÇË÷Òı£¬wavetype¾ö¶¨ÁËÃ¿Ò»²¨ÓĞ¶àÉÙÀàµĞÈË!!!!!
         load_type.push_back(t);
     }
 }
@@ -39,6 +75,7 @@ void MainWindow::gen_type(){           //²úÉúÒ»´®µĞÈËÖÖÀàµÄĞòÁĞ
 void MainWindow::load_current_wave(){
         if(is_next_load==false){   //Èç¹ûµ±Ç°µÄÃ»ÓĞ¼ÓÔØÍê£¬¼ÓÔØµ±Ç°µÄ
         e1.push_back(gen_enemy(load_type[load_current_index]));
+        cout<<load_type[load_current_index]<<"  "<<load_current_index<<endl;
         e1.back()->set(start_x, start_y);        //------------------------------------³õÊ¼»¯µĞÈËÊôĞÔ
         e1.back()->wave_enhance(wave);    //Ëæ×Å²¨Êı±äÇ¿£¬Ö÷ÒªÊÇhp±ä¶à
         load_current_index++;
@@ -77,7 +114,7 @@ Enemy* MainWindow::gen_enemy(int i){
 
 
 void MainWindow::load_next_wave(){
-    if (is_next_load==true &&e1.size()==0){
+    if (is_next_load==true && enemy_treated>=e1.size()){   //È«²¿´¦ÀíÍêµÄ»°
     gen_type();   //×¢ÒâºÍwave++µÄÏÈºóË³Ğò
     e1.clear();
     wave++;
@@ -85,44 +122,38 @@ void MainWindow::load_next_wave(){
     //cout<<"next"<<endl;
     is_next_load=false;
     have_rested=false;   //¼ÓÔØÏÂÒ»²¨µÄÊ±ºò£¬²¢²»ÊÇÔÚĞİÏ¢ºó
+    for (int i=0; i<e1.size(); i++){     //ÇåÀí¸É¾»µĞÈËÊı×é
+        delete e1[i];
+        e1[i]=NULL;
+        e1.clear();
+    }
+    enemy_treated=0;  //´¦ÀíÁ¿¹éÁã
     }
 }
 
 
-
-void MainWindow::initgame(){
-    allhp=1000;
-    hp=allhp;
-    score=1000;
-    timerid1=startTimer(e_spd);    //Ë¢ĞÂµĞÈËÒÆ¶¯
-    timerid2=startTimer(e_spd2);   //Ë¢ĞÂµĞÈËÊıÁ¿
-    timerid3=startTimer(e_spd3);  //×Óµ¯²úÉú
-    timerid4=startTimer(e_spd4);  //×Óµ¯ÒÆ¶¯
-    timerid5=startTimer(e_spd5);  //µĞÈË×Óµ¯²úÉú
-    timerid6=startTimer(e_spd6);  //Ã¿²¨¼ä¸ô
-    //tw.push_back(Tower());     Ò»¿ªÊ¼µÄÒ»¸öËş
-    //tw[0].set(400,320);
-    type_checked=new int[6]{1,3,0,0,0,0};     //³õÊ¼»¯Ö»ÓĞid=1,3              ---------------------------------¼ÇµÃdelete
-    type_pic=new QImage[12];
-    menu_x=new int[6]{110,210,310,410,510,610};  //²Ëµ¥À¸¼ä¾à           ------------------------¼ÇµÃdelete
-    //¼ÓÔØºÃµØÍ¼¡¢Ñ¡ÏîÍ¼±ê
-    map.load(":/images/map1.png");
-    remove.load(":/images/chanzi.png");
-    up.load(":/images/shengji.png");
-    cancel.load(":/images/quxiao.png");
-    type_pic[0].load(":/images/xiaohuolong.png");
-    type_pic[1].load(":/images/minilong.png");
-    type_pic[2].load(":/images/jienigui.png");
-    type_pic[3].load(":/images/leixilamu.png");
-    keng_pic.load(":/images/keng.png");
-    e1.push_back(gen_enemy(1));
-    e1[0]->set(start_x,start_y);//³õÊ¼Î»ÖÃ
-    gen_type();   //²úÉúÒ»ÅúµĞÈËµÄÖÖÀàid
-}
-
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::setboom(){
+    double x=tw.back()->getx()-230, y=tw.back()->gety()-230;
+    ui->boomlabel->setGeometry(x, y, 530, 530);
+    ui->boomlabel->setScaledContents(true);
+    ui->boomlabel->setVisible(true);
+    movie = new QMovie(":/images/boom.gif");
+    ui->boomlabel->setMovie(movie);
+    movie->start();
+    boomtimer->setSingleShot(true);
+    boomtimer->start(1500);
+}
+
+void MainWindow::boomdone(){
+    movie->stop();
+    delete movie;
+    movie=NULL;
+    ui->boomlabel->setVisible(false);
 }
 
 void MainWindow::paintEvent(QPaintEvent *){
@@ -172,6 +203,7 @@ void MainWindow::draw(QPainter &p){
     p.drawRect(7, 90, 80*hp/allhp, 7);             //»­ÑªÌõ
     if (e1.size()>0){
     for (int i=0; i<e1.size(); i++){
+        if (!e1[i]->die())         //ËÀµÄÆÁ±Îµô
         e1[i]->show(p);
     }
     }
@@ -194,6 +226,7 @@ void MainWindow::draw(QPainter &p){
         if (type_id==2) {p.drawImage(size, type_pic[1]); p.drawEllipse(QPoint(local_x+40, local_y+40), 180, 180);}  //  2ºÅËşÃÔÄãÁúÉä³Ì180
         if (type_id==3) {p.drawImage(size, type_pic[2]); p.drawEllipse(QPoint(local_x+40, local_y+40), 200, 200);}  //  3ºÅËş½ÜÄá¹êÉä³Ì200
         if (type_id==4) {p.drawImage(size, type_pic[3]); p.drawEllipse(QPoint(local_x+40, local_y+40), 250, 250);}  //  4ºÅËşÀ×Ï£À­Ä·Éä³Ì250
+        if (type_id==5) {p.drawImage(size, type_pic[4]); p.drawEllipse(QPoint(local_x+40, local_y+40), 250, 250);}  //  5ºÅÍçÆ¤µ¯Éä³Ì250
     }
 
     for (int i=0; i<ebs.size(); i++){
@@ -211,17 +244,15 @@ void MainWindow::timerEvent(QTimerEvent *e){
             e1[i]->move();
             m1.collide_check(e1[i]);
             //cout<<e1[i].gethp()<<endl;
-            if(e1[i]->die()){
+            if(e1[i]->die() && e1[i]->has_scored==false){
                 score+=e1[i]->get_score();
-                delete e1[i];    //ÊÍ·ÅÖ¸ÏòµÄµĞÈË¶ÔÏóÄÚ´æ---------------Ò»¸öÎÊÌâ£ºÃ»·¨±ÜÃâÊÍ·ÅÁ½´Î
-                e1[i]=NULL;
-                e1.erase(e1.begin()+i);   //É¾³ıÊı×éµÄÖ¸ÕëÔªËØ
+                enemy_treated+=1;
+                e1[i]->has_scored=true;
             }
-            else if(m1.outbound(e1[i]) ){     //½øÈë¼ÒÔ°£¬¼ÒµôÑª
+            else if(m1.outbound(e1[i]) &&e1[i]->has_hurt_hp==false){     //½øÈë¼ÒÔ°£¬¼ÒµôÑª
                 hp-=e1[i]->get_damage();
-                delete e1[i];    //ÊÍ·ÅÖ¸ÏòµÄµĞÈË¶ÔÏóÄÚ´æ------------
-                e1[i]=NULL;
-                e1.erase(e1.begin()+i);   //É¾³ıÊı×éµÄÖ¸ÕëÔªËØ
+                enemy_treated+=1;
+                e1[i]->has_hurt_hp=true;
             }
         }
         for (int i=0; i<tw.size();i++){    //¼ì²â ËşÊÇ·ñÕóÍö
@@ -232,28 +263,28 @@ void MainWindow::timerEvent(QTimerEvent *e){
             }
         }
     }
-    if(id==timerid2){
+    else if(id==timerid2){
         if (Waveinfo::you_can_rest(wave)  && have_rested==false){emit rest(); is_on=false; }    //ÔİÍ£µÄ²¨Êı
         else load_current_wave();
     repaint(); }
-    if (id==timerid6){
+    else if (id==timerid6){
         load_next_wave();
         repaint();
     }
-    if(id==timerid3){
+    else if(id==timerid3){
         for(int i=0; i<tw.size(); i++){
         tw[i]->getenemy(e1);
         tw[i]->attack();
         repaint();
         }
     }
-    if(id==timerid4){
+    else if(id==timerid4){
         for(int i=0; i<tw.size(); i++){
         tw[i]->attack();}
         ebattack();
         repaint();
     }
-    if(id==timerid5){
+    else if(id==timerid5){
         gettower(tw);
         repaint();
     }
@@ -313,6 +344,22 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
       m2p=2;    //ÍÏ¶¯µÄĞÅºÅ
       int tmp=type_checked[3];
       type_id=tmp; } //À×Ï£À­Ä·id
+    }
+    if(x<560 &&x>500){
+        if (type_checked[4]>0){
+      local_x=x;
+      local_y=y;
+      m2p=2;    //ÍÏ¶¯µÄĞÅºÅ
+      int tmp=type_checked[4];
+      type_id=tmp; }
+    }
+    if(x<660 &&x>600){
+        if (type_checked[5]>0){
+      local_x=x;
+      local_y=y;
+      m2p=2;    //ÍÏ¶¯µÄĞÅºÅ
+      int tmp=type_checked[5];
+      type_id=tmp; }
     }
     repaint();
     }
@@ -377,12 +424,14 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event){
     Tower * twp;
     double fx=static_cast<double>(mx);
     double fy=static_cast<double>(my);
-    if (type_id==1) {twp=new Tower(); twp->set(fx, fy);}
+    if (type_id==1) {twp=new Tower(); twp->set(fx, fy); }
     if (type_id==2) {twp=new Tower2(); twp->set(fx, fy);}
     if (type_id==3) {twp=new Tower3(); twp->set(fx, fy);}
     if (type_id==4) {twp=new Tower4(); twp->set(fx, fy);}
+    if (type_id==5) {twp=new Tower5(); twp->set(fx, fy);}
     if (score>=twp->get_make_score()  && m1.can_put(mx,my-20)){        //·ÖÊı×ã¹»Ôò¿ÉÒÔ½øĞĞÖÖËşÇÒÕâ¸öÎ»ÖÃÄÜÖÖ
     tw.push_back(twp);   //ÕâÀïÑ¹ÈëtwpÆäÊµÊÇ×öÁËÒ»¸ö¿½±´
+    if (tw.back()->getid()==5) emit boom();   //ÍçÆ¤µ¯±¬Õ¨
     score-=twp->get_make_score();}    //ÏûºÄ·ÖÊı
     else {     //·ÖÊı²»¹»£¬»òÕßÃ»·¨·Å£¬É¾³ı
         delete twp;
@@ -411,7 +460,7 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event){    //Ë«»÷Ò²¿ÉÒÔÉ¾³ı£
 void MainWindow::gettower(vector <Tower*> es){       //µĞÈËµÄ½ø¹¥ÔÚÖ÷½çÃæÊµÏÖ
     if (es.size()>0 && e1.size()>0){
     for (int i=0; i<e1.size(); i++){
-        if (e1[i]->get_id()==4){
+        if (e1[i]->get_id()==4 && !e1[i]->die()){    //Ã»ËÀ²ÅÄÜ½ø¹¥
             int x=e1[i]->getx();
             int y=e1[i]->gety();
         int ei=0;

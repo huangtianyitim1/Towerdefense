@@ -16,6 +16,7 @@
 #include"enemy_bullet.h"
 #include<QTimer>
 #include"wave_info.h"
+#include<QMovie>
 
 using namespace std;
 
@@ -46,6 +47,7 @@ public:
     friend int get_num_per_type(int wave);
 
 
+
 protected:
     void paintEvent(QPaintEvent *);
     void timerEvent(QTimerEvent *);
@@ -60,9 +62,12 @@ protected:
 private slots:
     void recieve_start();
     void on_pushButton_clicked();
+    void setboom();
+    void boomdone();
 
 signals:
     void rest();
+    void boom();
 
 private:
     Ui::MainWindow *ui;
@@ -103,6 +108,9 @@ private:
     vector <int> load_type;    //每一波敌人的种类
     int load_current_index=0; //加载的这一波的第几个敌人
     int *menu_x;       //菜单栏的间隔
+    QTimer *boomtimer;
+    QMovie* movie; //装gif
+    int enemy_treated=0;   //处理完的敌人，包括进家园和死的
 };
 
 #endif // MAINWINDOW_H

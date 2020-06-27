@@ -30,8 +30,9 @@ void Tower2::getenemy(vector<Enemy *> &es){
     ei=0;
     for(; ei<es.size(); ei++){
         //cout<<es.size()<<endl;
+        if(!es[ei]->die()){
         double d=(es[ei]->getx()-x)*(es[ei]->getx()-x)+(es[ei]->gety()-y)*(es[ei]->gety()-y);    //平方距离
-        if(d<range*range) {/*cout<<ei<<endl;*/  break;}
+        if(d<range*range) {/*cout<<ei<<endl;*/  break;}}
     }
     //cout<<ei<<endl;
     if (ei==es.size()) ei=9999;   //说明没有发现敌人
@@ -80,8 +81,9 @@ void Tower3::getenemy(vector<Enemy *> &es){
     ei=0;
     for(; ei<es.size(); ei++){
         //cout<<es.size()<<endl;
+        if(!es[ei]->die()){
         double d=(es[ei]->getx()-x)*(es[ei]->getx()-x)+(es[ei]->gety()-y)*(es[ei]->gety()-y);    //平方距离
-        if(d<range*range) {/*cout<<ei<<endl;*/  break;}
+        if(d<range*range) {/*cout<<ei<<endl;*/  break;}}
     }
     //cout<<ei<<endl;
     if (ei==es.size()) ei=9999;   //说明没有发现敌人
@@ -130,17 +132,19 @@ void Tower4::getenemy(vector<Enemy *> &es){
 
     for(int ei=0; ei<es.size(); ei++){
         //cout<<es.size()<<endl;
+        if(!es[ei]->die()){
         double d=(es[ei]->getx()-x)*(es[ei]->getx()-x)+(es[ei]->gety()-y)*(es[ei]->gety()-y);    //平方距离
-        if(d<250*250) {/*cout<<ei<<endl;*/e_in=1;  break;}  //此时有敌人进入范围，250的信号范围
+        if(d<250*250) {/*cout<<ei<<endl;*/e_in=1;  break;}}  //此时有敌人进入范围，250的信号范围
     }
 
     for(int ei=0; ei<es.size(); ei++){
         //cout<<es.size()<<endl;
         if(e_in ==1){         //有信号才开始攻击
+            if(!es[ei]->die()){
         double d=(es[ei]->getx()-x)*(es[ei]->getx()-x)+(es[ei]->gety()-y)*(es[ei]->gety()-y);    //平方距离
         if(d<range*range) {
             es[ei]->hpminus(power);
-        }  //在光圈内，受到伤害
+        } } //在光圈内，受到伤害
     }
     }
     if (e_in==0) range=5;  //没有敌人时，及时更新光圈，缩小到接近于0
@@ -170,3 +174,42 @@ void Tower4::show(QPainter &p){
     p.setBrush(QBrush(Qt::blue));
     p.drawRect(x+75, y+10, 5,50*hp/allhp); //画血条
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+void Tower5::set(double x, double y){
+    this->x=x;
+    this->y=y;
+    range=250;  //范围
+    spd=1; //光圈射速，可以升级，一般不用
+    power=12;  //子弹威力，升级加大
+    picture=":/images/wanpidan.png";
+    id=5;
+    allhp=10;
+    hp=allhp;
+    make_score=750;
+    level_score=500;
+}
+
+int Tower5::levelup(){
+    if(level<5){
+    level++;
+    power=power+10;          //升级加威力
+
+    return level_score;
+    }
+    else return 0;
+}
+
+void Tower5::getenemy(vector<Enemy *> &es){
+    if (!have_boomed){
+    for(int ei=0; ei<es.size(); ei++){
+        //cout<<es.size()<<endl;
+        if (!es[ei]->die()){
+        double d=(es[ei]->getx()-x)*(es[ei]->getx()-x)+(es[ei]->gety()-y)*(es[ei]->gety()-y);    //平方距离
+        if(d<250*250) {/*cout<<ei<<endl;*/ es[ei]->hpminus(10000);}}  //此时有敌人进入范围，炸掉
+        have_boomed=true;
+    }}
+    else {}
+}
+
+void Tower5::attack(){}

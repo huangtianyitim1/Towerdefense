@@ -1,8 +1,8 @@
 #include"wave_info.h"
-const int Waveinfo::wave1=3;   //3
-const int Waveinfo::wave2=7;   //7
-const int Waveinfo::wave3=12;    //12
-const int Waveinfo::wave4=18;     //18
+const int Waveinfo::wave1=1;   //3
+const int Waveinfo::wave2=4;   //7
+const int Waveinfo::wave3=5;    //12
+const int Waveinfo::wave4=8;     //18
 const int Waveinfo::wave5=25;   //25
 const int Waveinfo::wave6=30;
 const int Waveinfo::wave7=35;

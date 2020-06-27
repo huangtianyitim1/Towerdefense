@@ -40,9 +40,10 @@ void Tower::show(QPainter &p){
 void Tower::getenemy(vector<Enemy *> &es){
     ei=0;
     for(; ei<es.size(); ei++){
+        if (!es[ei]->die()){    //屏蔽掉了那些死掉的
         //cout<<es.size()<<endl;
         double d=(es[ei]->getx()-x)*(es[ei]->getx()-x)+(es[ei]->gety()-y)*(es[ei]->gety()-y);    //平方距离
-        if(d<range*range) {/*cout<<ei<<endl;*/  break;}
+        if(d<range*range) {/*cout<<ei<<endl;*/  break;}}
     }
     //cout<<ei<<endl;
     if (ei==es.size()) ei=9999;   //说明没有发现敌人

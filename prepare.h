@@ -37,6 +37,8 @@ private slots:
 
     void on_leixilamu_stateChanged(int arg1);
 
+    void on_wanpidan_stateChanged(int arg1);
+
 signals:
     void back();
 

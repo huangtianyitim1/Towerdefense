@@ -32,6 +32,7 @@ protected:
     int allhp; //初始血量
     int make_score;   //建造消耗的积分
     int level_score;    //升级消耗的积分
+    bool have_boomed=false;   //还没爆炸
 public:
     Tower(){}
     Tower(int range, int spd, int power, int allhp, int make_score, int level_score): range(range),spd(spd),power(power),
