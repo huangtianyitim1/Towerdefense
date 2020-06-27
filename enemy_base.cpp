@@ -54,3 +54,16 @@ bool Enemy::die(){
     }
     else return false;
 }
+
+void Enemy::wave_enhance(int wave){                 //注意这里的wave是当前的wave，不用-1
+    if (wave<Waveinfo::wave1) {allhp+=0.05*allhp*wave; hp=allhp;}
+    if (wave>=Waveinfo::wave1 && wave <Waveinfo::wave2) {allhp+=0.06*allhp*wave; hp=allhp;}
+    if (wave>=Waveinfo::wave2 && wave<Waveinfo::wave3) {allhp+=0.07*allhp*wave; hp=allhp;}
+    if (wave>=Waveinfo::wave3 && wave<Waveinfo::wave4) {allhp+=0.08*allhp*wave; hp=allhp;}
+    if (wave>=Waveinfo::wave4 && wave<Waveinfo::wave5) {allhp+=0.09*allhp*wave; hp=allhp;}
+    if (wave>=Waveinfo::wave5 && wave<Waveinfo::wave7) {allhp+=0.1*allhp*wave; hp=allhp;}
+    if (wave>=Waveinfo::wave7 && wave<Waveinfo::wave9) {allhp+=0.1*allhp*wave; hp=allhp;}
+    if (wave>=Waveinfo::wave9 && wave<Waveinfo::wave11) {allhp+=0.1*allhp*wave; hp=allhp;}
+    if (wave>=Waveinfo::wave11 && wave<Waveinfo::waveend) {allhp+=0.1*allhp*wave; hp=allhp;}
+    if (wave>=Waveinfo::waveend) {allhp+=6*allhp+0.01*(wave-60)*allhp; hp=allhp;}
+}

@@ -34,6 +34,7 @@ void start_window::on_pushButton_clicked()
 }
 
 void start_window::show_prepare(){//回到中场休息界面
+    pre->new_info(w->next_wave());
     pre->show();
 }
 

@@ -5,21 +5,22 @@ void Tower2::set(double x, double y){
     this->y=y;
     range=180;  //范围
     spd=5; //子弹射速，可以升级，一般不用
-    power=7;  //子弹威力，升级加大
+    power=15;  //子弹威力，升级加大
     picture=":/images/minilong.png";
     id=2;
     allhp=10;
     hp=allhp;
-    make_score=450;
-    level_score=250;
+    make_score=500;
+    level_score=300;
 }
 
 
 int Tower2::levelup(){
-    if(level<3){
+    if(level<5){
     level++;
     if (level==2) {picture=":/images/hakelong.png"; power=power+9;}
-    if(level==3) {picture=":/images/kuailong.png"; power=power+11;}
+    if(level==3) {picture=":/images/kuailong.png"; power=power+9;}
+    if (level>=4){power+=9;}
     return level_score;
     }
     else return 0;
@@ -54,7 +55,7 @@ void Tower3::set(double x, double y){
     this->y=y;
     range=200;  //范围
     spd=3; //子弹射速，可以升级，一般不用
-    power=2;  //子弹威力，升级加大
+    power=10;  //子弹威力，升级加大
     picture=":/images/jienigui.png";
     id=3;
     allhp=10;
@@ -65,10 +66,11 @@ void Tower3::set(double x, double y){
 
 
 int Tower3::levelup(){
-    if(level<3){
+    if(level<5){
     level++;
-    if (level==2) {picture=":/images/kamigui.png"; power=power+7;}
-    if(level==3) {picture=":/images/shuijiangui.png"; power=power+9;}
+    if (level==2) {picture=":/images/kamigui.png"; power=power+6;}
+    if(level==3) {picture=":/images/shuijiangui.png"; power=power+6;}
+    if (level>=4){power+=6;}
     return level_score;
     }
     else return 0;
@@ -104,19 +106,20 @@ void Tower4::set(double x, double y){
     this->y=y;
     range=5;  //范围
     spd=1; //光圈射速，可以升级，一般不用
-    power=7;  //子弹威力，升级加大
+    power=12;  //子弹威力，升级加大
     picture=":/images/leixilamu.png";
     id=4;
     allhp=10;
     hp=allhp;
-    make_score=400;
-    level_score=300;
+    make_score=500;
+    level_score=500;
 }
 
 int Tower4::levelup(){
-    if(level<3){
+    if(level<5){
     level++;
-    power=power+12;          //升级加威力
+    power=power+10;          //升级加威力
+
     return level_score;
     }
     else return 0;

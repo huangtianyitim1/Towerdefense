@@ -15,6 +15,7 @@
 #include"tower_s.h"
 #include"enemy_bullet.h"
 #include<QTimer>
+#include"wave_info.h"
 
 using namespace std;
 
@@ -41,6 +42,9 @@ public:
     bool is_on=true;    //正在进行
     bool have_rested=false;   //已经休息过了的标识
     int * type_checked;   //选中的塔按顺序的id
+    int next_wave() const {return wave;}   //下一波的波数
+    friend int get_num_per_type(int wave);
+
 
 protected:
     void paintEvent(QPaintEvent *);

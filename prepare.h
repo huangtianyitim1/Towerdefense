@@ -7,6 +7,7 @@
 #include<QPushButton>
 #include<iostream>
 #include<numeric>
+#include"wave_info.h"
 using namespace std ;
 namespace Ui {
 class Prepare;
@@ -21,6 +22,7 @@ public:
     ~Prepare();
     void closeEvent(QCloseEvent *event);
     int * is_checked;
+    void new_info(int wave);  //根据下一波数更新信息
 
 private slots:
     void on_pushButton_clicked();

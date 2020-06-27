@@ -35,7 +35,8 @@ SOURCES += \
     tower_s.cpp \
     bullet_s.cpp \
     enemy_bullet.cpp \
-    prepare.cpp
+    prepare.cpp \
+    wave_info.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -48,7 +49,8 @@ HEADERS += \
     tower_s.h \
     bullet_s.h \
     enemy_bullet.h \
-    prepare.h
+    prepare.h \
+    wave_info.h
 
 FORMS += \
         mainwindow.ui \

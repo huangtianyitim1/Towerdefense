@@ -8,6 +8,13 @@ Prepare::Prepare(QWidget *parent) :
     ui->setupUi(this);
     this->resize(800,500);
     is_checked=new int[12]();    //选中与否数组初始化为0
+    ui->penhuolong->setVisible(false);
+    ui->kuailong->setVisible(false);
+    ui->shujiangui->setVisible(false);
+    ui->leixilamu->setVisible(false);
+    ui->jiekeluomu->setVisible(false);
+    ui->dailong->setVisible(false);
+    ui->wujitaina->setVisible(false);
 }
 
 Prepare::~Prepare()
@@ -20,8 +27,35 @@ void Prepare::on_pushButton_clicked()
 emit back();
 }
 
-void Prepare::closeEvent(QCloseEvent *event)
+void Prepare::new_info(int wave){
+    if (wave==Waveinfo::wave1){    //这时wave已经+1了，所以不用像gentype那样减1
+        ui->penhuolong->setVisible(true);
+        ui->shujiangui->setVisible(true);
+        ui->kuailong->setVisible(true);
 
+        ui->jiekeluomu->setVisible(true);     //第一波后，新敌人捷克罗姆登场
+    }
+    if(wave==Waveinfo::wave2){
+        ui->leixilamu->setVisible(true);
+
+        ui->jiekeluomu->setVisible(false);
+        ui->dailong->setVisible(true);
+    }
+    if(wave==Waveinfo::wave3){
+
+
+        ui->jiekeluomu->setVisible(false);
+        ui->dailong->setVisible(true);
+}
+    if(wave==Waveinfo::wave4){
+
+
+        ui->dailong->setVisible(false);
+        ui->wujitaina->setVisible(true);
+}
+}
+
+void Prepare::closeEvent(QCloseEvent *event)
 {
     QMessageBox::StandardButton button;
     button = QMessageBox::question(this, tr("CLOSE THE WINDOW"),
@@ -60,7 +94,6 @@ void Prepare::on_shujiangui_stateChanged(int arg1)
     if(accumulate(is_checked, is_checked+12, 0)>6) ui->pushButton->setEnabled(false);
     else ui->pushButton->setEnabled(true);
 }
-
 
 void Prepare::on_leixilamu_stateChanged(int arg1)
 {

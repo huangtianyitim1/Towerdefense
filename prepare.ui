@@ -37,8 +37,8 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>440</y>
+      <x>630</x>
+      <y>400</y>
       <width>111</width>
       <height>41</height>
      </rect>
@@ -48,7 +48,7 @@
 background-color: rgb(211, 211, 211);</string>
     </property>
     <property name="text">
-     <string>返回</string>
+     <string>Fight!</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="penhuolong">
@@ -56,8 +56,8 @@ background-color: rgb(211, 211, 211);</string>
      <rect>
       <x>160</x>
       <y>100</y>
-      <width>91</width>
-      <height>91</height>
+      <width>81</width>
+      <height>81</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -70,9 +70,9 @@ background-color: rgb(211, 211, 211);</string>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>40</y>
-      <width>191</width>
+      <x>120</x>
+      <y>30</y>
+      <width>641</width>
       <height>41</height>
      </rect>
     </property>
@@ -86,7 +86,7 @@ font: 75 14pt &quot;微软雅黑&quot;;</string>
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'微软雅黑'; font-size:14pt; font-weight:72; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#ffff7f;&quot;&gt;请选择你要出战的小精灵&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#ffff7f;&quot;&gt;恭喜你还活着！请选择出战的小精灵&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="shujiangui">
@@ -94,8 +94,8 @@ p, li { white-space: pre-wrap; }
      <rect>
       <x>480</x>
       <y>100</y>
-      <width>91</width>
-      <height>91</height>
+      <width>71</width>
+      <height>71</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -110,8 +110,8 @@ p, li { white-space: pre-wrap; }
      <rect>
       <x>330</x>
       <y>100</y>
-      <width>91</width>
-      <height>91</height>
+      <width>81</width>
+      <height>71</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -126,12 +126,76 @@ p, li { white-space: pre-wrap; }
      <rect>
       <x>630</x>
       <y>100</y>
-      <width>91</width>
-      <height>91</height>
+      <width>81</width>
+      <height>71</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">border-image: url(:/images/微信图片_20200530134434_副本.png);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>410</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 75 10pt &quot;思源黑体 CN Bold&quot;;</string>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; color:#f5ee86;&quot;&gt;新敌人&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="jiekeluomu">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>380</y>
+      <width>111</width>
+      <height>111</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-image: url(:/images/微信图片_20200530134553_副本.png);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="dailong">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>380</y>
+      <width>111</width>
+      <height>111</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-image: url(:/images/4a36acaf2edda3cc29b29bef0ce93901203f92ae_副本.jpg);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="wujitaina">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>380</y>
+      <width>111</width>
+      <height>111</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-image: url(:/images/微信图片_20200530134130_副本.png);</string>
     </property>
     <property name="text">
      <string/>

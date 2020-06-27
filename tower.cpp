@@ -8,7 +8,7 @@ void Tower::set(double x, double y){
     this->y=y;
     range=200;  //范围
     spd=5; //子弹射速，可以升级，一般不用
-    power=5;  //子弹威力，升级加大
+    power=10;  //子弹威力，升级加大
     picture=":/images/xiaohuolong.png";
     id=1;
     allhp=10;
@@ -80,10 +80,11 @@ void Tower::attack(){
 }
 
 int Tower::levelup(){
-    if(level<3){
+    if(level<5){
     level++;
-    if (level==2) {picture=":/images/huokonglong.png"; power=power+7;}
-    if(level==3) {picture=":/images/penhuolong.png"; power=power+9;}
+    if (level==2) {picture=":/images/huokonglong.png"; power=power+6;}
+    if(level==3) {picture=":/images/penhuolong.png"; power=power+6;}
+    if (level>=4){power+=6;}
     return level_score;
     }
     else return 0;

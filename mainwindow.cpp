@@ -7,7 +7,7 @@ int start_x=800;
 int start_y=520;
 int MainWindow::e_spd=20;          //敌人移动刷新的频率
 int MainWindow::e_spd2=2000;    //敌人产生的频率
-int MainWindow::e_spd3=300;     //塔子弹产生频率
+int MainWindow::e_spd3=600;     //塔子弹产生频率
 int MainWindow::e_spd4=5;        //塔子弹移动刷新频率
 int MainWindow::e_spd5=1200;   //敌人子弹产生频率
 int MainWindow::e_spd6=5000;  //每波间隔时间
@@ -29,8 +29,9 @@ void MainWindow::recieve_start(){
 void MainWindow::gen_type(){           //产生一串敌人种类的序列
     QTime time = QTime::currentTime();     //随机数
     qsrand((uint) time.msec());
-    for (int i=0; i<6; i++){
-        int t=qrand()%6+1;    //记得加1，是id而不是索引
+    if(wave<Waveinfo::wave5-1)  //--------------------------------这里wave5要换图了
+    for (int i=0; i<Waveinfo::num_phase1; i++){
+        int t=qrand()%Waveinfo::wavetype(wave)+1;    //记得加1，是id而不是索引
         load_type.push_back(t);
     }
 }
@@ -38,7 +39,8 @@ void MainWindow::gen_type(){           //产生一串敌人种类的序列
 void MainWindow::load_current_wave(){
         if(is_next_load==false){   //如果当前的没有加载完，加载当前的
         e1.push_back(gen_enemy(load_type[load_current_index]));
-        e1.back()->set(start_x, start_y);
+        e1.back()->set(start_x, start_y);        //------------------------------------初始化敌人属性
+        e1.back()->wave_enhance(wave);    //随着波数变强，主要是hp变多
         load_current_index++;
         if (load_current_index==load_type.size())
         {is_next_load=true;     //如果这一波加载满了，准备--加载下一波
@@ -76,7 +78,7 @@ Enemy* MainWindow::gen_enemy(int i){
 
 void MainWindow::load_next_wave(){
     if (is_next_load==true &&e1.size()==0){
-    gen_type();
+    gen_type();   //注意和wave++的先后顺序
     e1.clear();
     wave++;
     cout<<wave<<endl;
@@ -85,6 +87,7 @@ void MainWindow::load_next_wave(){
     have_rested=false;   //加载下一波的时候，并不是在休息后
     }
 }
+
 
 
 void MainWindow::initgame(){
@@ -99,7 +102,7 @@ void MainWindow::initgame(){
     timerid6=startTimer(e_spd6);  //每波间隔
     //tw.push_back(Tower());     一开始的一个塔
     //tw[0].set(400,320);
-    type_checked=new int[6]{1,2,3,0,0,0};     //初始化只有id=1,2,3              ---------------------------------记得delete
+    type_checked=new int[6]{1,3,0,0,0,0};     //初始化只有id=1,3              ---------------------------------记得delete
     type_pic=new QImage[12];
     menu_x=new int[6]{110,210,310,410,510,610};  //菜单栏间距           ------------------------记得delete
     //加载好地图、选项图标
@@ -230,7 +233,7 @@ void MainWindow::timerEvent(QTimerEvent *e){
         }
     }
     if(id==timerid2){
-        if (wave==2 && have_rested==false){emit rest(); is_on=false; }
+        if (Waveinfo::you_can_rest(wave)  && have_rested==false){emit rest(); is_on=false; }    //暂停的波数
         else load_current_wave();
     repaint(); }
     if (id==timerid6){
@@ -267,7 +270,6 @@ int MainWindow::no_tower(int x, int y){
     if (count ==0) return -999;
     else return i;
 }
-
 
 
 void MainWindow::mousePressEvent(QMouseEvent *event){

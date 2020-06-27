@@ -6,6 +6,7 @@
 #include <QMouseEvent>
 #include <QMediaPlayer>
 #include <iostream>
+#include"wave_info.h"
 //#include<tower.h>
 //#include"enemy_bullet.h"
 //class Tower;
@@ -34,6 +35,7 @@ public:
     virtual void set(double x, double y)=0;                  //设置速度和这一刻位置、初始血量!!注意，速度和初始血我放到函数体里定义了
     //因为一定不要改写含有默认参数的虚函数！！！会出大问题的！
     void setspd(double s);                //设置速度
+    double getspd() const {return steps;}
     void move();                               //敌人移动
     void show(QPainter&p);
     virtual void loadimage()=0;
@@ -49,6 +51,7 @@ public:
     double get_bullet_spd() const{return bullet_spd;} //子弹速度
     int get_power() const{return power;}      //子弹威力
     int get_damage() const{return damage;}
+    void wave_enhance(int wave);   //每一波后的强化
     //virtual void gettower(vector <Tower *> &ts){}   //搜寻塔，攻击
     //virtual void attack(){}  //子弹移动
 };
