@@ -45,6 +45,7 @@ public:
     int * type_checked;   //选中的塔按顺序的id
     int next_wave() const {return wave;}   //下一波的波数
     friend int get_num_per_type(int wave);
+    int AI_choose();    //弱AI选择起点
 
 
 
@@ -69,6 +70,8 @@ private slots:
     void get_enhance();
     void enhancedone();
 
+    void on_pushButton_2_clicked();
+
 signals:
     void rest();
     void boom();
@@ -80,7 +83,7 @@ private:
     static const int WINDOW_W=900;  //界面宽
     const static int WINDOW_H=600;
     static const int MARGIN=0;  //游戏边界
-    QImage dot, map, remove, up, cancel;
+    QImage dot, map, map2, map3, remove, up, cancel;
     vector <Enemy *> e1 ;  //一群敌人(不一定类型相同)的指针
     int timerid1; //敌人移动刷新的id
     static int e_spd;  //敌人移动刷新的频率
@@ -123,6 +126,7 @@ private:
     QMediaPlayer * freezeplayer;
     QMediaPlayer *enhanceplayer;
     Tower *jidi;   //模拟塔目标
+    int phase=1;   //大的关卡
 };
 
 #endif // MAINWINDOW_H

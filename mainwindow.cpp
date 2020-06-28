@@ -5,6 +5,10 @@
 
 int start_x=800;
 int start_y=520;
+int start_x2=800;
+int start_y2=220;
+int start_x3=40;
+int start_y3=420;
 int MainWindow::e_spd=20;          //敌人移动刷新的频率
 int MainWindow::e_spd2=2000;    //敌人产生的频率
 int MainWindow::e_spd3=600;     //塔子弹产生频率
@@ -25,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::initgame(){
     allhp=1000;
     hp=allhp;
+    wave=10;
     score=100000;   //------------------------------------------------------------------
     timerid1=startTimer(e_spd);    //刷新敌人移动
     timerid2=startTimer(e_spd2);   //刷新敌人数量
@@ -46,6 +51,8 @@ void MainWindow::initgame(){
     enhanceplayer=new QMediaPlayer;
     //加载好地图、选项图标
     map.load(":/images/map1.png");
+    map2.load(":/images/map2.png");
+    map3.load(":/images/map3.png");
     remove.load(":/images/chanzi.png");
     up.load(":/images/shengji.png");
     cancel.load(":/images/quxiao.png");
@@ -78,19 +85,73 @@ void MainWindow::recieve_start(){
 void MainWindow::gen_type(){           //产生一串敌人种类的序列
     time = QTime::currentTime();     //随机数
     qsrand((uint) time.msec());
-    if(wave<Waveinfo::wave5-1)  //--------------------------------这里wave5要换图了
-        cout<<Waveinfo::wave4-1<<endl;
+    if(wave>Waveinfo::wave5-1)  //--------------------------------这里wave5要换图了
+    {phase=2;  for (int i=0; i<tw.size(); i++){
+            if (!m1.can_put2(tw[i]->getx(),tw[i]->gety()-20)){ delete tw[i]; tw[i]=NULL; tw.erase(tw.begin()+i); }
+        }}
+    if(wave>Waveinfo::wave9-1)  //--------------------------------这里wave5要换图了，注意道路上放不了的，全部清除
+    {phase=3;  for (int i=0; i<tw.size(); i++){
+            if (!m1.can_put3(tw[i]->getx(),tw[i]->gety()-20)){delete tw[i]; tw[i]=NULL; tw.erase(tw.begin()+i); }
+        }}
+    if (phase==1){
     for (int i=0; i<Waveinfo::num_phase1; i++){
-        int t=qrand()%8+1;    //记得加1，是id而不是索引，wavetype决定了每一波有多少类敌人!!!!!
+        int t=qrand()%Waveinfo::wavetype(wave)+1;    //记得加1，是id而不是索引，wavetype决定了每一波有多少类敌人!!!!!
         load_type.push_back(t);
+    }}
+    if (phase==2){
+    for (int i=0; i<Waveinfo::num_phase2; i++){
+        int t=qrand()%Waveinfo::wavetype(wave)+1;    //记得加1，是id而不是索引，wavetype决定了每一波有多少类敌人!!!!!
+        load_type.push_back(t);
+    }}
+    if (phase==3){
+    for (int i=0; i<Waveinfo::num_phase3; i++){
+        int t=qrand()%Waveinfo::wavetype(wave)+1;    //记得加1，是id而不是索引，wavetype决定了每一波有多少类敌人!!!!!
+        load_type.push_back(t);
+    }}
+}
+
+int MainWindow::AI_choose(){
+    if (phase==1) return 1;   //第一关只有一个入口
+    if (phase==2) {
+        int c1=0, c2=0;
+        for (int i=0; i<tw.size(); i++){
+            if ((tw[i]->getx()>495 && tw[i]->gety()>400)||(tw[i]->getx()>295 &&tw[i]->getx()<400 && tw[i]->gety()>300)) c1++; //计数贴在一号口的塔
+            if(tw[i]->getx()>495 && tw[i]->gety()>100 &&tw[i]->gety()<400) c2++;  //计数贴在2号口的
+        }
+        if(c1<c2) return 1;
+        if(c1>c2) return 2;
+        if(c1==c2) return 2;   //挑人少的走
+    }
+    if (phase==3) {
+        int c1=0, c2=0, c3=0;
+        for (int i=0; i<tw.size(); i++){
+            if ((tw[i]->getx()>495 && tw[i]->gety()>400)||(tw[i]->getx()>295 &&tw[i]->getx()<400 && tw[i]->gety()>300)) c1++; //计数贴在一号口的塔
+            if(tw[i]->getx()>495 && tw[i]->gety()>100 &&tw[i]->gety()<400) c2++;  //计数贴在2号口的
+            if((tw[i]->getx()<400 && tw[i]->gety()>300)) c3++;
+        }
+        if(c1<c2) {
+            if(c1<c3) return 1;
+            else return 3;
+        }
+        else {
+            if (c2<=c3) return 2;
+            else return 3;
+        }
+        //挑人少的走
     }
 }
 
 void MainWindow::load_current_wave(){
         if(is_next_load==false){   //如果当前的没有加载完，加载当前的
         e1.push_back(gen_enemy(load_type[load_current_index]));
-        cout<<load_type[load_current_index]<<"  "<<load_current_index<<endl;
-        e1.back()->set(start_x, start_y);        //------------------------------------初始化敌人属性
+        int choose=AI_choose();
+
+        if (choose==1){
+        e1.back()->set(start_x, start_y, 1);    }    //------------------------------------初始化敌人属性
+        else if (choose==2){
+        e1.back()->set(start_x2, start_y2, 1); }
+        else e1.back()->set(start_x3, start_y3, 3);
+
         e1.back()->wave_enhance(wave);    //随着波数变强，主要是hp变多
         load_current_index++;
         if (load_current_index==load_type.size())
@@ -218,7 +279,12 @@ void MainWindow::paintEvent(QPaintEvent *){
     QRect background(0,0,900,600);
     //dot.load(":/images/apple.png");
     //p.drawImage(target, dot);
-    p.drawImage(background, map);    //画背景
+    if (phase==1){
+    p.drawImage(background, map); }   //画背景
+    if (phase==2){
+    p.drawImage(background, map2); }   //画背景
+    if (phase==3){
+    p.drawImage(background, map3); }   //画背景
     //QRect type1(110,10,70,70);
     //QRect type2(210,10,70,70);
     //QRect type3(310,10,70,70);
@@ -228,6 +294,7 @@ void MainWindow::paintEvent(QPaintEvent *){
             int tmp=type_checked[i];
             QRect type_i(menu_x[i],10,70,70);
             p.drawImage(type_i, type_pic[tmp-1]);  //记得-1，索引是从0开始的
+            //cout<<"---------------"<<type_checked[i]<<endl;
         }
     }
     //p.drawImage(type1, type1_pic);   //画可选塔1：小火龙
@@ -301,7 +368,9 @@ void MainWindow::timerEvent(QTimerEvent *e){
         for (int i=0; i<e1.size(); i++){
             //e1[i].setspd(1);
             e1[i]->move();
-            m1.collide_check(e1[i]);
+            if (phase==1) m1.collide_check(e1[i]);
+            if (phase==2) m1.collide_check2(e1[i]);
+            if (phase==3) m1.collide_check3(e1[i]);
             //cout<<e1[i].gethp()<<endl;
             if(e1[i]->die() && e1[i]->has_scored==false){
                 score+=e1[i]->get_score();
@@ -371,7 +440,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
     int y=event->y();
     QWidget::mousePressEvent(event);
 
-    if (y<=100){    ///////////////工具栏，选择塔类型
+    if (y<=100 &&m2p==0){    ///////////////工具栏，选择塔类型
     if(x<160 &&x>100){
         if (type_checked[0]>0){
       local_x=x;
@@ -492,12 +561,27 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event){
     if (type_id==7) {twp=new Tower7(); twp->set(fx, fy);}
      if (type_id==8) {twp=new Tower8(); twp->set(fx, fy);}
      if (type_id==9) {twp=new Tower9(); twp->set(fx, fy);}
+     if(phase==1){
     if (score>=twp->get_make_score()  && m1.can_put(mx,my-20)){        //分数足够则可以进行种塔且这个位置能种
     tw.push_back(twp);   //这里压入twp其实是做了一个拷贝
     if (tw.back()->getid()==5) emit boom();   //顽皮弹爆炸
     if (tw.back()->getid()==7) emit freeze();   //冰冻3s
     if (tw.back()->getid()==8) emit enhance();  //全员强化
-    score-=twp->get_make_score();}    //消耗分数
+    score-=twp->get_make_score();}  }  //消耗分数
+     else if(phase==2){
+    if (score>=twp->get_make_score()  && m1.can_put2(mx,my-20)){        //分数足够则可以进行种塔且这个位置能种
+    tw.push_back(twp);   //这里压入twp其实是做了一个拷贝
+    if (tw.back()->getid()==5) emit boom();   //顽皮弹爆炸
+    if (tw.back()->getid()==7) emit freeze();   //冰冻3s
+    if (tw.back()->getid()==8) emit enhance();  //全员强化
+    score-=twp->get_make_score();}  }  //消耗分数
+     else if(phase==3){
+    if (score>=twp->get_make_score()  && m1.can_put3(mx,my-20)){        //分数足够则可以进行种塔且这个位置能种
+    tw.push_back(twp);   //这里压入twp其实是做了一个拷贝
+    if (tw.back()->getid()==5) emit boom();   //顽皮弹爆炸
+    if (tw.back()->getid()==7) emit freeze();   //冰冻3s
+    if (tw.back()->getid()==8) emit enhance();  //全员强化
+    score-=twp->get_make_score();}  }  //消耗分数
     else {     //分数不够，或者没法放，删除
         delete twp;
         twp=NULL;
@@ -606,3 +690,9 @@ void MainWindow::on_pushButton_clicked()      //暂停游戏
 }
 
 
+
+void MainWindow::on_pushButton_2_clicked()     //回血，一次500，回50
+{
+    if (score>=500){ hp+=50; score-=500;}
+    if (hp>1000) {hp=1000;}
+}

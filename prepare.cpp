@@ -20,6 +20,8 @@ Prepare::Prepare(QWidget *parent) :
     ui->jidongniao->setVisible(false);
     ui->menghuan->setVisible(false);
     ui->ladiousi->setVisible(false);
+    ui->liekongzuo->setVisible(false);
+    ui->xueyifeilong->setVisible(false);
 }
 
 Prepare::~Prepare()
@@ -38,8 +40,6 @@ void Prepare::new_info(int wave){
         ui->shujiangui->setVisible(true);
         ui->kuailong->setVisible(true);
 
-         ui->ladiousi->setVisible(true);
-        ui->menghuan->setVisible(true);
 
         ui->jiekeluomu->setVisible(true);     //第一波后，新敌人捷克罗姆登场
     }
@@ -72,20 +72,20 @@ void Prepare::new_info(int wave){
     if(wave>=Waveinfo::wave8){
         ui->jidongniao->setVisible(true);
 
-        ui->dailong->setVisible(false);
-        ui->wujitaina->setVisible(true);
+        ui->wujitaina->setVisible(false);
+        ui->xueyifeilong->setVisible(true);
 }
     if(wave>=Waveinfo::wave9){
             ui->menghuan->setVisible(true);
 
-            ui->dailong->setVisible(false);
-            ui->wujitaina->setVisible(true);
+            ui->wujitaina->setVisible(false);
+            ui->xueyifeilong->setVisible(true);
     }
     if(wave>=Waveinfo::wave11){
             ui->ladiousi->setVisible(true);
 
-            ui->dailong->setVisible(false);
-            ui->wujitaina->setVisible(true);
+            ui->xueyifeilong->setVisible(false);
+            ui->liekongzuo->setVisible(true);
     }
 
 }

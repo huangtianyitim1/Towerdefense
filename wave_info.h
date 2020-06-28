@@ -29,13 +29,13 @@ public:
       if (wave<wave1-1) return 3;
       if (wave>=wave1-1 && wave <wave2-1) return 4;
       if (wave>=wave2-1 && wave<wave3-1) return 5;
-      if (wave>=wave3-1 && wave<wave4-1) return 6;
-      if (wave>=wave4-1 && wave<wave5-1) return 7;
-      if (wave>=wave5-1 && wave<wave7-1) return 8;
-      if (wave>=wave7-1 && wave<wave9-1) return 9;
-      if (wave>=wave9-1 && wave<wave11-1) return 10;
-      if (wave>=wave11-1 && wave<waveend-1) return 11;
-      if (wave>=waveend-1) return 12;
+      if (wave>=wave3-1 && wave<wave4-1) return 5;
+      if (wave>=wave4-1 && wave<wave5-1) return 6;
+      if (wave>=wave5-1 && wave<wave7-1) return 6;
+      if (wave>=wave7-1 && wave<wave9-1) return 6;
+      if (wave>=wave8-1 && wave<wave11-1) return 7;
+      if (wave>=wave11-1 && wave<waveend-1) return 8;
+      if (wave>=waveend-1) return 8;
   }
 };
 
