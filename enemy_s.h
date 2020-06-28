@@ -54,4 +54,22 @@ public:
     void set(double x, double y);                  //设置速度和这一刻位置、初始血量
     void loadimage();
 };
+
+class Enemy7: public Enemy{
+protected:
+public:
+    Enemy7(){}
+    ~Enemy7();
+    void set(double x, double y);                  //设置速度和这一刻位置、初始血量
+    void loadimage();
+};
+
+class Enemy8: public Enemy{
+protected:
+public:
+    Enemy8(){}
+    ~Enemy8();
+    void set(double x, double y);                  //设置速度和这一刻位置、初始血量
+    void loadimage();
+};
 #endif // ENEMY_S_H

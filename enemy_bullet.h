@@ -21,9 +21,10 @@ protected:
     QImage pic_b;
     Tower* e;                   //记录锁定的塔
     int type_id;     //子弹种类id
+    QString pic;   //子弹图片
 
 public:
-    EBullet(){}
+    EBullet(QString pic);
     virtual~EBullet(){}
     virtual void set(double x, double y, Tower *p);  //位置  和锁定的敌人
     double getdir() const {return dir;}             //返回方向
@@ -36,5 +37,7 @@ public:
     double gety() const{ return y;}
     int getp() const{ return power;}        //返回威力
     void move();             //子弹移动
+    void set_id(int id);
+    int get_id() const {return type_id;}
 };
 #endif // ENEMY_BULLET_H

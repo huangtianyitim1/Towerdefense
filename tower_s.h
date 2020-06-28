@@ -63,4 +63,62 @@ public:
     void attack();
 };
 
+class Tower6: public Tower{
+public:
+    Tower6(){}
+    Tower6(int range, int spd, int power, int allhp, int make_score, int level_score): Tower(range, spd, power, allhp, make_score, level_score){
+        picture=":/images/pikaqiu.png";
+        id=6;
+        hp=this->allhp;
+    }
+    ~Tower6(){}
+    int levelup();
+    void set(double x, double y);
+    void getenemy(vector<Enemy *> &es);
+};
+
+class Tower7: public Tower{
+public:
+    Tower7(){}
+    Tower7(int range, int spd, int power, int allhp, int make_score, int level_score): Tower(range, spd, power, allhp, make_score, level_score){
+        picture=":/images/jidongniao.png";
+        id=7;
+        hp=this->allhp;
+    }
+    ~Tower7(){}
+    int levelup();
+    void set(double x, double y);
+    void getenemy(vector<Enemy *> &es);
+    void attack();
+};
+
+class Tower8: public Tower{
+public:
+    Tower8(){}
+    Tower8(int range, int spd, int power, int allhp, int make_score, int level_score): Tower(range, spd, power, allhp, make_score, level_score){
+        picture=":/images/menghuan.png";
+        id=8;
+        hp=this->allhp;
+    }
+    ~Tower8(){}
+    int levelup();
+    void set(double x, double y);
+    void getenemy(vector<Enemy *> &es);
+    void attack();
+};
+
+class Tower9: public Tower{
+public:
+    Tower9(){}
+    Tower9(int range, int spd, int power, int allhp, int make_score, int level_score): Tower(range, spd, power, allhp, make_score, level_score){
+        picture=":/images/ladiyasi.png";
+        id=9;
+        hp=this->allhp;
+    }
+    ~Tower9(){}
+    int levelup();
+    void set(double x, double y);
+    void getenemy(vector<Enemy *> &es);
+};
+
 #endif // TOWER_S_H

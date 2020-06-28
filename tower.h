@@ -33,6 +33,10 @@ protected:
     int make_score;   //建造消耗的积分
     int level_score;    //升级消耗的积分
     bool have_boomed=false;   //还没爆炸
+
+
+signals:
+
 public:
     Tower(){}
     Tower(int range, int spd, int power, int allhp, int make_score, int level_score): range(range),spd(spd),power(power),
@@ -59,5 +63,7 @@ public:
     int get_hp() const{return hp;}   //小于等于0判定为死亡
     int get_make_score() const {return make_score;}
     int get_level_score() const {return level_score;}
+    double get_power() const {return power;}
+    double set_power(double p) {this->power=p;}
 };
 #endif // TOWER_H

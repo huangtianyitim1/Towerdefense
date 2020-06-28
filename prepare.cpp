@@ -16,6 +16,10 @@ Prepare::Prepare(QWidget *parent) :
     ui->dailong->setVisible(false);
     ui->wujitaina->setVisible(false);
     ui->wanpidan->setVisible(false);
+    ui->pikaqiu->setVisible(false);
+    ui->jidongniao->setVisible(false);
+    ui->menghuan->setVisible(false);
+    ui->ladiousi->setVisible(false);
 }
 
 Prepare::~Prepare()
@@ -31,31 +35,59 @@ emit back();
 void Prepare::new_info(int wave){
     if (wave>=Waveinfo::wave1){    //这时wave已经+1了，所以不用像gentype那样减1
         ui->penhuolong->setVisible(true);
-
-        ui->wanpidan->setVisible(true);
         ui->shujiangui->setVisible(true);
         ui->kuailong->setVisible(true);
+
+         ui->ladiousi->setVisible(true);
+        ui->menghuan->setVisible(true);
 
         ui->jiekeluomu->setVisible(true);     //第一波后，新敌人捷克罗姆登场
     }
     if(wave>=Waveinfo::wave2){
-        ui->leixilamu->setVisible(true);
+
 
         ui->jiekeluomu->setVisible(false);
         ui->dailong->setVisible(true);
     }
     if(wave>=Waveinfo::wave3){
-
+        ui->leixilamu->setVisible(true);
 
         ui->jiekeluomu->setVisible(false);
         ui->dailong->setVisible(true);
 }
     if(wave>=Waveinfo::wave4){
-
+        ui->wanpidan->setVisible(true);
 
         ui->dailong->setVisible(false);
         ui->wujitaina->setVisible(true);
 }
+
+    if(wave>=Waveinfo::wave6){
+        ui->pikaqiu->setVisible(true);
+
+        ui->dailong->setVisible(false);
+        ui->wujitaina->setVisible(true);
+}
+
+    if(wave>=Waveinfo::wave8){
+        ui->jidongniao->setVisible(true);
+
+        ui->dailong->setVisible(false);
+        ui->wujitaina->setVisible(true);
+}
+    if(wave>=Waveinfo::wave9){
+            ui->menghuan->setVisible(true);
+
+            ui->dailong->setVisible(false);
+            ui->wujitaina->setVisible(true);
+    }
+    if(wave>=Waveinfo::wave11){
+            ui->ladiousi->setVisible(true);
+
+            ui->dailong->setVisible(false);
+            ui->wujitaina->setVisible(true);
+    }
+
 }
 
 void Prepare::closeEvent(QCloseEvent *event)
@@ -110,6 +142,38 @@ void Prepare::on_wanpidan_stateChanged(int arg1)
 {
     if (arg1==Qt::Checked)  is_checked[4]=1;
     else is_checked[4]=0;
+    if(accumulate(is_checked, is_checked+12, 0)>6) ui->pushButton->setEnabled(false);
+    else ui->pushButton->setEnabled(true);
+}
+
+void Prepare::on_pikaqiu_stateChanged(int arg1)
+{
+    if (arg1==Qt::Checked)  is_checked[5]=1;
+    else is_checked[5]=0;
+    if(accumulate(is_checked, is_checked+12, 0)>6) ui->pushButton->setEnabled(false);
+    else ui->pushButton->setEnabled(true);
+}
+
+void Prepare::on_jidongniao_stateChanged(int arg1)
+{
+    if (arg1==Qt::Checked)  is_checked[6]=1;
+    else is_checked[6]=0;
+    if(accumulate(is_checked, is_checked+12, 0)>6) ui->pushButton->setEnabled(false);
+    else ui->pushButton->setEnabled(true);
+}
+
+void Prepare::on_menghuan_stateChanged(int arg1)
+{
+    if (arg1==Qt::Checked)  is_checked[7]=1;
+    else is_checked[7]=0;
+    if(accumulate(is_checked, is_checked+12, 0)>6) ui->pushButton->setEnabled(false);
+    else ui->pushButton->setEnabled(true);
+}
+
+void Prepare::on_ladiousi_stateChanged(int arg1)
+{
+    if (arg1==Qt::Checked)  is_checked[8]=1;
+    else is_checked[8]=0;
     if(accumulate(is_checked, is_checked+12, 0)>6) ui->pushButton->setEnabled(false);
     else ui->pushButton->setEnabled(true);
 }

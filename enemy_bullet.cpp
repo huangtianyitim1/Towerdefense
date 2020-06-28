@@ -3,6 +3,8 @@ using namespace std;
 int EBullet::h=20;
 int EBullet::w=20;
 
+EBullet::EBullet(QString pic): pic(pic){}
+
 void EBullet::set(double x, double y, Tower *p){
     this->e=p;
     this->x=x;
@@ -23,7 +25,7 @@ void EBullet::set(double x, double y, Tower *p){
         dir=-1*asin((fabs(static_cast<double>(ey-y)))/l)+3.1415926*2;
     }
       //注意这里用atan则不能得到360！
-    type_id=10;   //种类id为10
+    //type_id=10;   //种类id为10
 }
 
 void EBullet::setspd(double s){
@@ -31,7 +33,7 @@ void EBullet::setspd(double s){
 }
 
 void EBullet::loadimage(){
-    pic_b.load(":/images/zuqiu.png");
+    pic_b.load(pic);
 }
 
 void EBullet::show(QPainter &p){
@@ -59,4 +61,8 @@ void EBullet::move(){
         //cout<<x<<"--------"<<y<<endl;
         //cout<<cos(dir)<<endl;
     }
+}
+
+void EBullet::set_id(int id){
+    type_id=id;
 }

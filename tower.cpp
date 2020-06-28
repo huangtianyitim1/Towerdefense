@@ -81,11 +81,10 @@ void Tower::attack(){
 }
 
 int Tower::levelup(){
-    if(level<5){
+    if(level<3){
     level++;
     if (level==2) {picture=":/images/huokonglong.png"; power=power+6;}
     if(level==3) {picture=":/images/penhuolong.png"; power=power+6;}
-    if (level>=4){power+=6;}
     return level_score;
     }
     else return 0;

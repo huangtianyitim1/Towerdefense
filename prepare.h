@@ -39,6 +39,14 @@ private slots:
 
     void on_wanpidan_stateChanged(int arg1);
 
+    void on_pikaqiu_stateChanged(int arg1);
+
+    void on_jidongniao_stateChanged(int arg1);
+
+    void on_menghuan_stateChanged(int arg1);
+
+    void on_ladiousi_stateChanged(int arg1);
+
 signals:
     void back();
 

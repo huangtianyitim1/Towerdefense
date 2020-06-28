@@ -114,3 +114,46 @@ void Enemy6::loadimage(){
 }
 
 Enemy6::~Enemy6(){cout<<11<<endl;}
+
+//----------------------------------------------------------------------------------------
+
+void Enemy7::set(double x, double y) {
+    this->x=x;
+    this->y=y;
+    this->steps=5;
+    this->allhp=80;
+    this->hp=allhp;             //初始hp，会扣
+    this->e_score=400;
+    type_id=7;
+    damage=100;
+}
+
+void Enemy7::loadimage(){
+    pic_e.load(":/images/xueyifeilong.png");
+}
+
+Enemy7::~Enemy7(){cout<<11<<endl;}
+
+//----------------------------------------------------------------------------------------
+
+void Enemy8::set(double x, double y) {
+    this->x=x;
+    this->y=y;
+    this->steps=1.5;
+    this->allhp=550;
+    this->hp=allhp;             //初始hp，会扣
+    this->e_score=800;
+    type_id=8;
+    range=200;
+    bullet_spd=2.5;
+    power=15;
+    damage=150;
+}
+
+void Enemy8::loadimage(){
+    pic_e.load(":/images/liekongzuo.png");
+}
+
+Enemy8::~Enemy8(){cout<<11<<endl;}
+
+

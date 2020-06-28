@@ -64,10 +64,16 @@ private slots:
     void on_pushButton_clicked();
     void setboom();
     void boomdone();
+    void setfreeze();
+    void freezedone();
+    void get_enhance();
+    void enhancedone();
 
 signals:
     void rest();
     void boom();
+    void freeze();
+    void enhance();
 
 private:
     Ui::MainWindow *ui;
@@ -92,6 +98,7 @@ private:
     QTime time;
     vector <Tower *> tw;
     vector <EBullet *>ebs;   //敌人的子弹避免互相引用，直接放主界面
+    vector <EBullet*> ebs2;   //直接打基地的子弹
     int score;    //分数
     QString s_score, s_wave, s_hp;  //分数文字、波数、血量
     int allhp;
@@ -109,8 +116,13 @@ private:
     int load_current_index=0; //加载的这一波的第几个敌人
     int *menu_x;       //菜单栏的间隔
     QTimer *boomtimer;
+    QTimer *freezetimer;
+    QTimer *enhancetimer;
     QMovie* movie; //装gif
     int enemy_treated=0;   //处理完的敌人，包括进家园和死的
+    QMediaPlayer * freezeplayer;
+    QMediaPlayer *enhanceplayer;
+    Tower *jidi;   //模拟塔目标
 };
 
 #endif // MAINWINDOW_H

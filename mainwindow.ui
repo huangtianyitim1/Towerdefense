@@ -41,8 +41,8 @@ font: 75 9pt &quot;思源黑体 CN Bold&quot;;</string>
    <widget class="QLabel" name="boomlabel">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>170</y>
+      <x>180</x>
+      <y>140</y>
       <width>41</width>
       <height>9</height>
      </rect>

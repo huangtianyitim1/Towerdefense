@@ -37,7 +37,13 @@ void MainWindow::initgame(){
     type_checked=new int[6]{1,3,0,0,0,0};     //初始化只有id=1,3              ---------------------------------记得delete
     type_pic=new QImage[12];
     menu_x=new int[6]{110,210,310,410,510,610};  //菜单栏间距           ------------------------记得delete
+    jidi=new Tower();
+    jidi->set(0,120);
     boomtimer=new QTimer(this);
+    freezetimer=new QTimer(this);
+    enhancetimer=new QTimer(this);
+    freezeplayer = new QMediaPlayer;
+    enhanceplayer=new QMediaPlayer;
     //加载好地图、选项图标
     map.load(":/images/map1.png");
     remove.load(":/images/chanzi.png");
@@ -48,6 +54,10 @@ void MainWindow::initgame(){
     type_pic[2].load(":/images/jienigui.png");
     type_pic[3].load(":/images/leixilamu.png");
     type_pic[4].load(":/images/wanpidan.png");
+    type_pic[5].load(":/images/pikaqiu.png");
+    type_pic[6].load(":/images/jidongniao.png");
+    type_pic[7].load(":/images/menghuan.png");
+    type_pic[8].load(":/images/ladiyasi.png");
     keng_pic.load(":/images/keng.png");
     //e1.push_back(gen_enemy(1));
     //e1[0]->set(start_x,start_y);//初始位置
@@ -55,6 +65,10 @@ void MainWindow::initgame(){
     ui->boomlabel->setVisible(false);
     connect(this, SIGNAL(boom()), this, SLOT(setboom()));
     connect(this->boomtimer, SIGNAL(timeout()), this, SLOT(boomdone()));
+    connect(this,SIGNAL(freeze()),this,SLOT(setfreeze()));
+    connect(freezetimer,SIGNAL(timeout()),this, SLOT(freezedone()));
+    connect(this, SIGNAL(enhance()), this, SLOT(get_enhance()));
+    connect(enhancetimer, SIGNAL(timeout()),this, SLOT(enhancedone()));
 }
 
 void MainWindow::recieve_start(){
@@ -67,7 +81,7 @@ void MainWindow::gen_type(){           //产生一串敌人种类的序列
     if(wave<Waveinfo::wave5-1)  //--------------------------------这里wave5要换图了
         cout<<Waveinfo::wave4-1<<endl;
     for (int i=0; i<Waveinfo::num_phase1; i++){
-        int t=qrand()%Waveinfo::wavetype(wave)+1;    //记得加1，是id而不是索引，wavetype决定了每一波有多少类敌人!!!!!
+        int t=qrand()%8+1;    //记得加1，是id而不是索引，wavetype决定了每一波有多少类敌人!!!!!
         load_type.push_back(t);
     }
 }
@@ -108,6 +122,13 @@ Enemy* MainWindow::gen_enemy(int i){
     case 6:  //S
         p=new Enemy6();
         break;
+    case 7:  //S
+        p=new Enemy7();
+        break;
+    case 8:  //S
+        p=new Enemy8();
+        break;
+
     }
         return p;
 }
@@ -154,6 +175,36 @@ void MainWindow::boomdone(){
     delete movie;
     movie=NULL;
     ui->boomlabel->setVisible(false);
+}
+
+void MainWindow::setfreeze(){
+    freezetimer->setSingleShot(true);
+    freezetimer->start(3000);    //冰冻三秒
+    killTimer(timerid1);
+    freezeplayer ->setMedia(QUrl("qrc:/sounds/freeze.mp3"));
+    freezeplayer ->setVolume(30);
+    freezeplayer ->play();
+}
+
+void MainWindow::freezedone(){
+    freezeplayer->stop();
+    timerid1=startTimer(e_spd);
+}
+
+void MainWindow::get_enhance(){          //全员强化
+    for (int i=0; i<tw.size(); i++){
+        double tmp=tw[i]->get_power();
+        tw[i]->set_power(tmp+5);
+    }
+    enhancetimer->setSingleShot(true);
+    enhancetimer->start(3000);
+    enhanceplayer->setMedia(QUrl("qrc:/sounds/enhance.mp3"));
+    enhanceplayer->setVolume(30);
+    enhanceplayer->play();
+}
+
+void MainWindow::enhancedone(){
+    enhanceplayer->stop();
 }
 
 void MainWindow::paintEvent(QPaintEvent *){
@@ -203,7 +254,7 @@ void MainWindow::draw(QPainter &p){
     p.drawRect(7, 90, 80*hp/allhp, 7);             //画血条
     if (e1.size()>0){
     for (int i=0; i<e1.size(); i++){
-        if (!e1[i]->die())         //死的屏蔽掉
+        if (!e1[i]->die() && !m1.outbound(e1[i]))         //死的屏蔽掉、出界的屏蔽掉
         e1[i]->show(p);
     }
     }
@@ -227,10 +278,18 @@ void MainWindow::draw(QPainter &p){
         if (type_id==3) {p.drawImage(size, type_pic[2]); p.drawEllipse(QPoint(local_x+40, local_y+40), 200, 200);}  //  3号塔杰尼龟射程200
         if (type_id==4) {p.drawImage(size, type_pic[3]); p.drawEllipse(QPoint(local_x+40, local_y+40), 250, 250);}  //  4号塔雷希拉姆射程250
         if (type_id==5) {p.drawImage(size, type_pic[4]); p.drawEllipse(QPoint(local_x+40, local_y+40), 250, 250);}  //  5号顽皮弹射程250
+         if (type_id==6) {p.drawImage(size, type_pic[5]); p.drawEllipse(QPoint(local_x+40, local_y+40), 200, 200);}  //  6号皮卡丘射程200
+         if (type_id==7) {p.drawImage(size, type_pic[6]); p.drawEllipse(QPoint(local_x+40, local_y+40), 200, 200);}  //  7号急冻鸟
+         if (type_id==8) {p.drawImage(size, type_pic[7]); p.drawEllipse(QPoint(local_x+40, local_y+40), 200, 200);}  //  8号梦幻
+         if (type_id==9) {p.drawImage(size, type_pic[8]); p.drawEllipse(QPoint(local_x+40, local_y+40), 300, 300);}  //  9号拉帝亚斯
     }
+
 
     for (int i=0; i<ebs.size(); i++){
     ebs[i]->show(p);      //敌人的子弹单独画
+    }
+    for (int i=0; i<ebs2.size(); i++){
+    ebs2[i]->show(p);      //敌人的子弹单独画
     }
 }
 
@@ -255,6 +314,20 @@ void MainWindow::timerEvent(QTimerEvent *e){
                 e1[i]->has_hurt_hp=true;
             }
         }
+    }
+    if(id==timerid2){
+        if (Waveinfo::you_can_rest(wave)  && have_rested==false){emit rest(); is_on=false; }    //暂停的波数
+        else load_current_wave();
+    repaint(); }
+    if (id==timerid6){
+        load_next_wave();
+        repaint();
+    }
+    if(id==timerid3){
+        for(int i=0; i<tw.size(); i++){
+        tw[i]->getenemy(e1);
+        tw[i]->attack();
+        }
         for (int i=0; i<tw.size();i++){    //检测 塔是否阵亡
             if (tw[i]->get_hp()<=0){
                 delete tw[i];
@@ -262,29 +335,15 @@ void MainWindow::timerEvent(QTimerEvent *e){
                 tw.erase(tw.begin()+i);
             }
         }
-    }
-    else if(id==timerid2){
-        if (Waveinfo::you_can_rest(wave)  && have_rested==false){emit rest(); is_on=false; }    //暂停的波数
-        else load_current_wave();
-    repaint(); }
-    else if (id==timerid6){
-        load_next_wave();
         repaint();
     }
-    else if(id==timerid3){
-        for(int i=0; i<tw.size(); i++){
-        tw[i]->getenemy(e1);
-        tw[i]->attack();
-        repaint();
-        }
-    }
-    else if(id==timerid4){
+    if(id==timerid4){
         for(int i=0; i<tw.size(); i++){
         tw[i]->attack();}
         ebattack();
         repaint();
     }
-    else if(id==timerid5){
+    if(id==timerid5){
         gettower(tw);
         repaint();
     }
@@ -343,7 +402,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
       local_y=y;
       m2p=2;    //拖动的信号
       int tmp=type_checked[3];
-      type_id=tmp; } //雷希拉姆id
+      type_id=tmp; } //雷希拉姆id------------------------------------------
     }
     if(x<560 &&x>500){
         if (type_checked[4]>0){
@@ -429,9 +488,15 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event){
     if (type_id==3) {twp=new Tower3(); twp->set(fx, fy);}
     if (type_id==4) {twp=new Tower4(); twp->set(fx, fy);}
     if (type_id==5) {twp=new Tower5(); twp->set(fx, fy);}
+    if (type_id==6) {twp=new Tower6(); twp->set(fx, fy);}
+    if (type_id==7) {twp=new Tower7(); twp->set(fx, fy);}
+     if (type_id==8) {twp=new Tower8(); twp->set(fx, fy);}
+     if (type_id==9) {twp=new Tower9(); twp->set(fx, fy);}
     if (score>=twp->get_make_score()  && m1.can_put(mx,my-20)){        //分数足够则可以进行种塔且这个位置能种
     tw.push_back(twp);   //这里压入twp其实是做了一个拷贝
     if (tw.back()->getid()==5) emit boom();   //顽皮弹爆炸
+    if (tw.back()->getid()==7) emit freeze();   //冰冻3s
+    if (tw.back()->getid()==8) emit enhance();  //全员强化
     score-=twp->get_make_score();}    //消耗分数
     else {     //分数不够，或者没法放，删除
         delete twp;
@@ -475,16 +540,30 @@ void MainWindow::gettower(vector <Tower*> es){       //敌人的进攻在主界面实现
             double ex=es[ei]->getx();
             double ey=es[ei]->gety();//否则，定位到第ei个敌人(-1)
             //cout<<ex<<"------"<<ey<<endl;
-            EBullet *bp=new EBullet();
+            EBullet *bp=new EBullet(":/images/zuqiu.png");
             ebs.push_back(bp);
             ebs.back()->set(x+30, y+30, es[ei]);
+            ebs.back()->set_id(e1[i]->get_id()+10);
             ebs.back()->setspd(e1[i]->get_bullet_spd());     //初始化子弹的射速
             ebs.back()->setpower(e1[i]->get_power());   //子弹威力
             cout<<"launch"<<endl;
                 }
         }
+        if (e1[i]->get_id()==8 && !e1[i]->die()){    //没死才能进攻
+            int x=e1[i]->getx();
+            int y=e1[i]->gety();
+            cout<<"1111111111111111111"<<endl;
+            //cout<<ex<<"------"<<ey<<endl;
+            EBullet *bp=new EBullet(":/images/huoqiu.png");
+            ebs2.push_back(bp);
+            ebs2.back()->set(x+30, y+30, jidi);
+            ebs2.back()->set_id(e1[i]->get_id()+10);
+            ebs2.back()->setspd(e1[i]->get_bullet_spd());     //初始化子弹的射速
+            ebs2.back()->setpower(e1[i]->get_power());   //子弹威力
+            cout<<"launch"<<endl;
     }
     }
+}
 }
 
 void MainWindow::ebattack(){
@@ -495,10 +574,26 @@ void MainWindow::ebattack(){
             ebs[i]=NULL;
             ebs.erase(ebs.begin()+i);                  //打中扣血，子弹消失
         }
-        else if (ebs[i]->getx()>960 || ebs[i]->gety()>540 || ebs[i]->getx()<0 || ebs[i]->gety()<0){
+        else if (ebs[i]->getx()>960 || ebs[i]->gety()>540 || ebs[i]->getx()<-10 || ebs[i]->gety()<-10){
             delete ebs[i];                      //删除子弹对象占有的内存
             ebs[i]=NULL;
             ebs.erase(ebs.begin()+i);          //到界外了，删除
+        }
+    }
+    for(int i=0; i<ebs2.size(); i++){         //每颗子弹都移动, 自己的方向已经设置好了
+        ebs2[i]->move();
+        cout<<"1111111111111111111"<<endl;
+        if (ebs2[i]->shootdown()){
+            hp-=ebs2[i]->getp();
+
+            delete ebs2[i];         //删除子弹对象占有的内存
+            ebs2[i]=NULL;
+            ebs2.erase(ebs2.begin()+i);                  //打中扣血，子弹消失
+        }
+        else if (ebs2[i]->getx()>960 || ebs2[i]->gety()>540 || ebs2[i]->getx()<-10 || ebs2[i]->gety()<-10){
+            delete ebs2[i];                      //删除子弹对象占有的内存
+            ebs2[i]=NULL;
+            ebs2.erase(ebs2.begin()+i);          //到界外了，删除
         }
     }
 }
