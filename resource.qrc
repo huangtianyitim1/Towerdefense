@@ -81,5 +81,11 @@
         <file>images/df09343df8a135c22c0af1defb37e8ab_副本.jpg</file>
         <file>images/map2.png</file>
         <file>images/map3.png</file>
+        <file>sounds/bgm.mp3</file>
+        <file>sounds/planting.mp3</file>
+        <file>sounds/score.MP3</file>
+        <file>sounds/warning.mp3</file>
+        <file>sounds/levelup.MP3</file>
+        <file>images/help.png</file>
     </qresource>
 </RCC>

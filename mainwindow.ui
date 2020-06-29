@@ -20,7 +20,7 @@
       <x>10</x>
       <y>0</y>
       <width>81</width>
-      <height>41</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="maximumSize">
@@ -65,6 +65,22 @@ font: 75 9pt &quot;思源黑体 CN Bold&quot;;</string>
     </property>
     <property name="text">
      <string>回血</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>40</y>
+      <width>69</width>
+      <height>15</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 75 9pt &quot;思源黑体 CN Bold&quot;;</string>
+    </property>
+    <property name="text">
+     <string>BGM</string>
     </property>
    </widget>
   </widget>

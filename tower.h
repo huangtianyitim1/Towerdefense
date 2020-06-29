@@ -47,8 +47,8 @@ public:
     }
     virtual ~Tower(){}
     const static int w,h;    //图片大小
-    virtual void set(double x, double y);   //位置和
-    void setspd(int spd) {this->spd=spd;}             //设置自己的所有的子弹速度，感觉没什么用
+    virtual void set(double x, double y);
+    void setspd(int spd) {this->spd=spd;}  //设置自己的所有的子弹速度，感觉没什么用
     virtual void show(QPainter&p);
     void loadimage(const QString &s);
     double getx() const {return x;}

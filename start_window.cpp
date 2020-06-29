@@ -8,7 +8,12 @@ start_window::start_window(QWidget *parent) :
     ui->setupUi(this);
     this->resize(900,600);
     pre=new Prepare(this);    //中场休息界面的初始化
+    g=new gameover(this);
+    h=new help(this);
     is_checked=new int[12]();
+    warning=new QMediaPlayer;
+    warning->setMedia(QUrl("qrc:/sounds/warning.mp3"));
+    warning->setVolume(80);
 }
 
 start_window::~start_window()
@@ -28,6 +33,8 @@ void start_window::on_pushButton_clicked()
     w=new MainWindow(this);          //跳转页面
     connect(w,SIGNAL(rest()),this,SLOT(show_prepare()));
     connect(pre,SIGNAL(back()),this,SLOT(showmain1()));
+    connect(g,SIGNAL(yes()),w, SLOT(close()));
+    connect(w,SIGNAL(gameover()),g,SLOT(show()));
     w->show();
     this->minimumSize();
     //emit showmain1();
@@ -40,6 +47,7 @@ void start_window::show_prepare(){//回到中场休息界面
 
 void start_window::showmain1(){
     pre->hide();
+    warning->play();
     w->show();
     w->have_rested=true;
     w->is_on=true;
@@ -57,4 +65,9 @@ void start_window::showmain1(){
     for (int i=0; i<12; i++){
         pre->is_checked[i]=0;    //回去之后，全部归零，回到全都未选状态
     }
+}
+
+void start_window::on_pushButton_2_clicked()
+{
+    h->show();
 }

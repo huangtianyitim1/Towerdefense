@@ -12,3 +12,8 @@ gameover::~gameover()
 {
     delete ui;
 }
+
+void gameover::on_pushButton_clicked()
+{
+    emit yes();
+}

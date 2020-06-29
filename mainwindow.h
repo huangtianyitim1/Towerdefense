@@ -72,11 +72,14 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void on_radioButton_clicked();
+
 signals:
     void rest();
     void boom();
     void freeze();
     void enhance();
+    void gameover();
 
 private:
     Ui::MainWindow *ui;
@@ -125,6 +128,12 @@ private:
     int enemy_treated=0;   //处理完的敌人，包括进家园和死的
     QMediaPlayer * freezeplayer;
     QMediaPlayer *enhanceplayer;
+    QMediaPlayer *bgm;
+    QMediaPlayer *warning;
+    QMediaPlayer *scoring;
+    QMediaPlayer *planting;
+    QMediaPlayer *leveling;
+    bool on_bgm;
     Tower *jidi;   //模拟塔目标
     int phase=1;   //大的关卡
 };

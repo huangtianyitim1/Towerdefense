@@ -36,7 +36,9 @@ SOURCES += \
     bullet_s.cpp \
     enemy_bullet.cpp \
     prepare.cpp \
-    wave_info.cpp
+    wave_info.cpp \
+    gameover.cpp \
+    help.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -50,12 +52,16 @@ HEADERS += \
     bullet_s.h \
     enemy_bullet.h \
     prepare.h \
-    wave_info.h
+    wave_info.h \
+    gameover.h \
+    help.h
 
 FORMS += \
         mainwindow.ui \
     start_window.ui \
-    prepare.ui
+    prepare.ui \
+    gameover.ui \
+    help.ui
 
 RESOURCES += \
     resource.qrc

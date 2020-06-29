@@ -27,10 +27,10 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 void MainWindow::initgame(){
-    allhp=1000;
+    allhp=2000;
     hp=allhp;
-    wave=10;
-    score=100000;   //------------------------------------------------------------------
+    wave=11;
+    score=30000;   //------------------------------------------------------------------
     timerid1=startTimer(e_spd);    //刷新敌人移动
     timerid2=startTimer(e_spd2);   //刷新敌人数量
     timerid3=startTimer(e_spd3);  //子弹产生
@@ -49,6 +49,23 @@ void MainWindow::initgame(){
     enhancetimer=new QTimer(this);
     freezeplayer = new QMediaPlayer;
     enhanceplayer=new QMediaPlayer;
+    bgm=new QMediaPlayer;
+    scoring= new QMediaPlayer;
+    planting= new QMediaPlayer;
+    warning= new QMediaPlayer;
+    leveling =new QMediaPlayer;
+    on_bgm=false;
+    bgm ->setMedia(QUrl("qrc:/sounds/bgm.mp3"));
+    bgm ->setVolume(30);
+    //bgm ->play();
+    planting->setMedia(QUrl("qrc:/sounds/planting.mp3"));
+    planting->setVolume(80);
+    warning->setMedia(QUrl("qrc:/sounds/warning.mp3"));
+    warning->setVolume(80);
+    scoring->setMedia(QUrl("qrc:/sounds/score.MP3"));
+    scoring->setVolume(80);
+    leveling->setMedia(QUrl("qrc:/sounds/levelup.MP3"));
+    leveling->setVolume(80);
     //加载好地图、选项图标
     map.load(":/images/map1.png");
     map2.load(":/images/map2.png");
@@ -243,7 +260,7 @@ void MainWindow::setfreeze(){
     freezetimer->start(3000);    //冰冻三秒
     killTimer(timerid1);
     freezeplayer ->setMedia(QUrl("qrc:/sounds/freeze.mp3"));
-    freezeplayer ->setVolume(30);
+    freezeplayer ->setVolume(80);
     freezeplayer ->play();
 }
 
@@ -260,7 +277,7 @@ void MainWindow::get_enhance(){          //全员强化
     enhancetimer->setSingleShot(true);
     enhancetimer->start(3000);
     enhanceplayer->setMedia(QUrl("qrc:/sounds/enhance.mp3"));
-    enhanceplayer->setVolume(30);
+    enhanceplayer->setVolume(80);
     enhanceplayer->play();
 }
 
@@ -374,10 +391,11 @@ void MainWindow::timerEvent(QTimerEvent *e){
             //cout<<e1[i].gethp()<<endl;
             if(e1[i]->die() && e1[i]->has_scored==false){
                 score+=e1[i]->get_score();
+                scoring->play();
                 enemy_treated+=1;
                 e1[i]->has_scored=true;
             }
-            else if(m1.outbound(e1[i]) &&e1[i]->has_hurt_hp==false){     //进入家园，家掉血
+            else if(m1.outbound(e1[i]) &&e1[i]->has_hurt_hp==false &&!e1[i]->die()){     //进入家园，家掉血
                 hp-=e1[i]->get_damage();
                 enemy_treated+=1;
                 e1[i]->has_hurt_hp=true;
@@ -404,6 +422,7 @@ void MainWindow::timerEvent(QTimerEvent *e){
                 tw.erase(tw.begin()+i);
             }
         }
+        if (hp<=0) {is_on=false; emit gameover(); bgm->stop(); delete bgm;}
         repaint();
     }
     if(id==timerid4){
@@ -512,6 +531,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
                     && y<tw[tw_i]->gety()-10
                     && y>tw[tw_i]->gety()-60){
                 if (score>=tw[tw_i]->get_level_score()){    //分数足够才能进化
+                    leveling->play();
                 score-=tw[tw_i]->levelup();}   //扣除进化的分数
             }
             else if(x<tw[tw_i]->getx()+150
@@ -564,6 +584,7 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event){
      if(phase==1){
     if (score>=twp->get_make_score()  && m1.can_put(mx,my-20)){        //分数足够则可以进行种塔且这个位置能种
     tw.push_back(twp);   //这里压入twp其实是做了一个拷贝
+    planting->play();
     if (tw.back()->getid()==5) emit boom();   //顽皮弹爆炸
     if (tw.back()->getid()==7) emit freeze();   //冰冻3s
     if (tw.back()->getid()==8) emit enhance();  //全员强化
@@ -571,6 +592,7 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event){
      else if(phase==2){
     if (score>=twp->get_make_score()  && m1.can_put2(mx,my-20)){        //分数足够则可以进行种塔且这个位置能种
     tw.push_back(twp);   //这里压入twp其实是做了一个拷贝
+    planting->play();
     if (tw.back()->getid()==5) emit boom();   //顽皮弹爆炸
     if (tw.back()->getid()==7) emit freeze();   //冰冻3s
     if (tw.back()->getid()==8) emit enhance();  //全员强化
@@ -578,6 +600,7 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event){
      else if(phase==3){
     if (score>=twp->get_make_score()  && m1.can_put3(mx,my-20)){        //分数足够则可以进行种塔且这个位置能种
     tw.push_back(twp);   //这里压入twp其实是做了一个拷贝
+    planting->play();
     if (tw.back()->getid()==5) emit boom();   //顽皮弹爆炸
     if (tw.back()->getid()==7) emit freeze();   //冰冻3s
     if (tw.back()->getid()==8) emit enhance();  //全员强化
@@ -695,4 +718,10 @@ void MainWindow::on_pushButton_2_clicked()     //回血，一次500，回50
 {
     if (score>=500){ hp+=50; score-=500;}
     if (hp>1000) {hp=1000;}
+}
+
+void MainWindow::on_radioButton_clicked()
+{
+    if (on_bgm==true){bgm->stop(); on_bgm=false; }
+    else {bgm->play(); on_bgm=true;}
 }

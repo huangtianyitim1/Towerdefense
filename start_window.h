@@ -10,6 +10,8 @@
 #include<QTime>
 #include"mainwindow.h"
 #include"prepare.h"
+#include"gameover.h"
+#include"help.h"
 namespace Ui {
 class start_window;
 }
@@ -32,12 +34,17 @@ private slots:
     void showmain1();
 
 
+    void on_pushButton_2_clicked();
+
 private:
     Ui::start_window *ui;
     QImage background;
     Prepare *pre;
     MainWindow *w;
+    gameover *g;
+    help *h;
     int * is_checked;
+    QMediaPlayer * warning;
 };
 
 #endif // START_WINDOW_H
